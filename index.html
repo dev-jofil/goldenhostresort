@@ -7,426 +7,1797 @@
 <meta name="description" content="Reserve your stay at Golden Host Resort, Sarasota, Florida.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap">
 <style>
 :root {
+  --ivory: #FAF6EE;
+  --sand: #F1E9DA;
+  --sand-2: #E6DBC6;
   --paper: #FFFFFF;
-  --ivory: #FFFAEE;
-  --olive: #A79F86;
-  --forest: #1E1C17;
-  --forest-deep: #15130F;
-  --bronze: #FFFAEE;
-  --bronze-hi: #15130F;
-  --ink: #221E18;
-  --ink-soft: rgba(34, 30, 24, .72);
-  --ink-faint: rgba(34, 30, 24, .5);
-  --rule-light: rgba(34, 30, 24, .14);
-  --error: #9A3B2B;
-  --f-display: "Cormorant Garamond", "Cormorant", Garamond, "Times New Roman", serif;
+  --navy: #1B2A41;
+  --navy-2: rgba(27, 42, 65, .8);
+  --navy-3: rgba(27, 42, 65, .68);
+  --line: rgba(27, 42, 65, .14);
+  --line-strong: rgba(27, 42, 65, .56);
+  --teal: #136A66;
+  --teal-2: #0D504D;
+  --teal-wash: #E1EEEA;
+  --error: #A3392A;
+  --error-wash: #FAEAE5;
+  --shadow: 0 1px 2px rgba(27, 42, 65, .06), 0 8px 24px rgba(27, 42, 65, .08);
+  --f-display: "Cormorant Garamond", Garamond, "Times New Roman", serif;
   --f-sans: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --pad: clamp(16px, 4vw, 56px);
-  --ease: cubic-bezier(.2, .7, .1, 1);
+  /* 4px spacing scale */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px;
+  /* locked shell height budget */
+  --h-header: 56px; --h-progress: 44px; --h-search: 72px; --h-action: 64px;
+  --row-h: 104px;
+  --input-h: 40px;
+  --gutter: 24px;
+  --t: .18s cubic-bezier(.2, .7, .1, 1);
   color-scheme: light;
 }
+@media (max-height: 639px) {
+  :root { --h-header: 48px; --h-progress: 36px; --h-search: 64px; --h-action: 56px; --input-h: 36px; }
+}
+@media (max-width: 639px) {
+  :root { --h-header: 52px; --h-progress: 40px; --h-search: 64px; --gutter: 16px; --input-h: 38px; }
+}
+@media (max-width: 719px) {
+  .shell[data-step="0"] { --h-search: 132px; }
+}
+
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { height: 100%; overflow: hidden; }
 body {
-  margin: 0; background: var(--ivory); color: var(--ink);
-  font-family: var(--f-sans); line-height: 1.5; -webkit-font-smoothing: antialiased;
-  display: flex; flex-direction: column;
+  margin: 0; background: var(--ivory); color: var(--navy);
+  font-family: var(--f-sans); font-size: .875rem; line-height: 1.45; -webkit-font-smoothing: antialiased;
 }
+img { display: block; max-width: 100%; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+p { margin: 0; }
 a { color: inherit; }
-img { max-width: 100%; display: block; }
-.wrap { max-width: 1040px; margin-inline: auto; padding-left: var(--pad); padding-right: var(--pad); width: 100%; }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.ico { width: 1em; height: 1em; flex: 0 0 auto; }
 
-.eyebrow {
-  font-size: clamp(.6rem, 1vw, .72rem); font-weight: 600; letter-spacing: .24em; text-transform: uppercase;
-  margin: 0 0 6px; color: var(--bronze-hi);
-}
-.display { font-family: var(--f-display); font-weight: 300; line-height: 1; letter-spacing: -.012em; margin: 0; }
-.display em { font-style: italic; color: var(--bronze-hi); }
-
-/* top bars */
-.preview-flag {
-  flex: 0 0 auto; background: #FCEFD8; color: #7A4A12; border-bottom: 1px solid rgba(122,74,18,.2);
-  font-size: .68rem; font-weight: 600; letter-spacing: .04em; text-align: center;
-  padding: 6px var(--pad);
-}
-header.nav { flex: 0 0 auto; background: var(--paper); border-bottom: 1px solid var(--rule-light); padding: 10px 0; }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.brand-logo { height: 30px; width: auto; border-radius: 3px; }
-.nav-back {
-  font-size: .68rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-  text-decoration: none; border-bottom: 1px solid currentColor; color: var(--ink-soft); padding-bottom: 2px;
+/* ---------- shell ---------- */
+.shell {
+  position: relative; height: 100vh; height: 100dvh; overflow: hidden;
+  display: grid; grid-template-rows: var(--h-header) var(--h-progress) minmax(0, 1fr);
 }
 
-/* hero strip */
-.hero-img {
-  flex: 0 0 auto; position: relative; height: clamp(80px, 16vh, 170px);
-  background: linear-gradient(135deg, var(--olive), var(--forest)) center/cover;
-  background-image: linear-gradient(0deg, rgba(21,19,15,.55), rgba(21,19,15,.1) 55%, rgba(21,19,15,.45)), url("bahi-hut-cover.avif");
-  background-size: cover; background-position: center;
-  display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 var(--pad);
+/* header */
+.masthead { display: flex; align-items: center; gap: var(--s4); min-width: 0; padding: 0 var(--gutter); }
+.brand { display: flex; align-items: center; gap: var(--s3); flex: 0 0 auto; text-decoration: none; border-radius: 4px; }
+.brand-logo { width: 32px; height: 32px; border-radius: 6px; object-fit: cover; }
+.brand-text { display: flex; flex-direction: column; gap: 3px; }
+.brand-name { font-family: var(--f-display); font-size: 1.25rem; font-weight: 600; line-height: 1; white-space: nowrap; }
+.brand-name em { font-style: italic; font-weight: 500; color: var(--teal); }
+.brand-place { font-size: .625rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; line-height: 1; color: var(--navy-3); }
+.proto-flag {
+  flex: 0 1 auto; min-width: 0; margin: 0 auto; padding: var(--s1) var(--s3); border-radius: 999px;
+  background: var(--sand); color: var(--navy-2); font-size: .72rem; line-height: 1.35; text-align: center;
 }
-.hero-img p {
-  margin: 0; color: var(--ivory); font-family: var(--f-display); font-style: italic;
-  font-size: clamp(1rem, 2.6vw, 1.7rem); text-shadow: 0 2px 10px rgba(0,0,0,.35);
+.proto-flag strong { color: var(--navy); }
+.nav-back { flex: 0 0 auto; font-size: .78rem; font-weight: 600; color: var(--navy-2); white-space: nowrap; text-underline-offset: 3px; }
+.nav-back:hover { color: var(--teal); }
+
+/* progress */
+.progress { display: flex; align-items: center; justify-content: center; min-width: 0; padding: 0 var(--gutter); }
+.progress ol { display: flex; align-items: center; width: min(100%, 820px); margin: 0; padding: 0; list-style: none; }
+.pstep { display: flex; align-items: center; flex: 1 1 0; min-width: 0; }
+.pstep:last-child { flex: 0 0 auto; }
+.pstep:not(:last-child)::after { content: ""; flex: 1 1 auto; min-width: var(--s4); height: 2px; margin: 0 var(--s2); border-radius: 1px; background: var(--line); }
+.pstep.is-done:not(:last-child)::after { background: var(--teal); }
+.pstep-btn {
+  display: inline-flex; align-items: center; gap: var(--s2); padding: var(--s1); border: 0; border-radius: 6px;
+  background: none; color: var(--navy-3); white-space: nowrap;
+}
+.pstep-btn:disabled { cursor: default; }
+.pstep-btn:not(:disabled):hover .pstep-label { text-decoration: underline; text-underline-offset: 3px; }
+.pstep-mark {
+  display: grid; place-items: center; width: 24px; height: 24px; flex: 0 0 auto; border-radius: 50%;
+  border: 1.5px solid var(--line-strong); font-size: .72rem; font-weight: 700;
+}
+.pstep-mark svg { width: 14px; height: 14px; }
+.pstep-label { font-size: .8rem; font-weight: 600; }
+.pstep.is-active .pstep-btn { color: var(--navy); }
+.pstep.is-active .pstep-mark { background: var(--navy); border-color: var(--navy); color: var(--paper); }
+.pstep.is-active .pstep-label { font-weight: 800; }
+.pstep.is-done .pstep-btn { color: var(--navy-2); }
+.pstep.is-done .pstep-mark { background: var(--teal); border-color: var(--teal); color: var(--paper); }
+
+/* ---------- booking form ---------- */
+.booking { display: grid; grid-template-rows: var(--h-search) minmax(0, 1fr); min-height: 0; min-width: 0; }
+.band { display: flex; align-items: center; min-width: 0; padding: 0 var(--gutter); box-shadow: inset 0 -1px var(--line); }
+.band-panel { width: 100%; min-width: 0; }
+.band-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--s4); }
+.band-h { margin: 0; font-family: var(--f-display); font-size: 1.75rem; font-weight: 500; line-height: 1.1; }
+.band-h:focus { outline: none; }
+.band-sub { color: var(--navy-2); font-size: .85rem; }
+
+/* fields */
+.field { display: flex; flex-direction: column; gap: var(--s1); min-width: 0; }
+.field > label {
+  font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; line-height: 16px;
+  color: var(--navy-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.req { color: var(--error); }
+input[type="date"], input[type="text"], input[type="email"], input[type="tel"], select {
+  width: 100%; min-width: 0; height: var(--input-h); padding: 0 var(--s3);
+  border: 1px solid var(--line-strong); border-radius: 6px; background: var(--paper); font-size: .875rem;
+}
+input::placeholder { color: var(--navy-3); }
+input:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px; border-color: var(--teal); }
+.field.has-error > input, .field.has-error > select, .field.has-error .stepper { border-color: var(--error); box-shadow: 0 0 0 1px var(--error); }
+.field-msg { display: flex; align-items: flex-start; gap: 6px; min-height: 18px; font-size: .75rem; font-weight: 600; line-height: 1.4; color: var(--error); }
+.field-msg:not(:empty)::before {
+  content: "!"; display: inline-grid; place-items: center; flex: 0 0 auto; width: 14px; height: 14px; margin-top: 2px;
+  border-radius: 50%; background: var(--error); color: var(--paper); font-size: 10px; font-weight: 800; line-height: 1;
 }
 
-/* app / steps */
-#app { flex: 1 1 auto; min-height: 0; background: var(--paper); display: flex; flex-direction: column; }
-.step { display: none; flex: 1 1 auto; min-height: 0; flex-direction: column; padding: clamp(8px, 1.8vh, 20px) 0; }
-.step.is-active { display: flex; }
-.step-head { flex: 0 0 auto; text-align: center; margin-bottom: clamp(6px, 1.6vh, 16px); }
-.step-count {
-  font-size: .64rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-faint);
-  margin: 0 0 4px;
+/* search band (step 1) */
+.search { display: flex; align-items: flex-end; gap: var(--s3); min-width: 0; }
+.f-date { flex: 0 1 172px; min-width: 136px; }
+.f-count { flex: 0 1 124px; min-width: 104px; }
+.stepper { display: flex; height: var(--input-h); border: 1px solid var(--line-strong); border-radius: 6px; background: var(--paper); }
+.stepper:focus-within { outline: 2px solid var(--teal); outline-offset: 1px; }
+.stepper input {
+  flex: 1 1 auto; width: 100%; min-width: 0; height: 100%; padding: 0; border: 0; background: transparent;
+  text-align: center; font-weight: 700; -moz-appearance: textfield; appearance: textfield;
 }
-.step-title { font-size: clamp(1.3rem, 2.6vw, 1.9rem); font-style: italic; margin: 0; }
-.step-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
-.step-nav { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; padding-top: clamp(8px, 1.6vh, 18px); }
-.step-nav .spacer { flex: 1; }
-
-/* stay row (step 1 top) */
-.stay-row { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: clamp(10px, 2vh, 20px); }
-.field { display: flex; flex-direction: column; gap: 4px; }
-.field label {
-  font-size: .62rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint);
+.stepper input:focus-visible { outline: none; }
+.stepper input::-webkit-inner-spin-button, .stepper input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.step-btn { flex: 0 0 32px; padding: 0; border: 0; border-radius: 5px; background: none; color: var(--teal); font-size: 1.15rem; font-weight: 700; line-height: 1; }
+.step-btn:hover { background: var(--teal-wash); }
+.step-btn:disabled { color: var(--line-strong); background: none; cursor: default; }
+.search-nights { display: flex; align-items: center; height: var(--input-h); padding: 0 var(--s1); font-size: .8rem; font-weight: 700; color: var(--navy-2); white-space: nowrap; }
+.search .btn { flex: 0 0 auto; min-width: 168px; margin-left: var(--s1); }
+@media (max-width: 959px) {
+  .search-nights { display: none; }
+  .f-date { min-width: 128px; }
+  .f-count { min-width: 96px; }
+  .search .btn { min-width: 0; }
 }
-input, textarea, select {
-  font: inherit; font-size: .86rem; color: var(--ink); background: var(--paper);
-  border: 1px solid var(--rule-light); padding: .6em .8em; min-width: 140px;
-}
-input:focus, textarea:focus, select:focus { outline: 2px solid var(--bronze-hi); outline-offset: 1px; }
-.nights-badge {
-  display: inline-flex; align-items: center; padding: .6em .9em; background: var(--ivory);
-  border: 1px solid var(--rule-light); font-size: .76rem; font-weight: 600; white-space: nowrap;
-}
-
-/* rooms */
-.room-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 1vw, 16px); align-items: stretch; }
-@media (max-width: 760px) { .room-grid { grid-template-columns: repeat(2, 1fr); } }
-.room-card {
-  position: relative; display: flex; flex-direction: column; justify-content: space-between;
-  border: 1px solid var(--rule-light); border-top: 3px solid var(--olive); background: var(--paper);
-  cursor: pointer; padding: clamp(8px, 1.4vh, 16px) clamp(10px, 1.2vw, 16px);
-  transition: border-color .3s var(--ease), box-shadow .3s var(--ease); overflow: hidden;
-}
-.room-card:has(input:checked) { border-color: var(--bronze-hi); border-top-color: var(--bronze-hi); box-shadow: 0 0 0 1px var(--bronze-hi); }
-.room-card input { position: absolute; opacity: 0; pointer-events: none; }
-.room-avail { font-size: .6rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 3px; }
-.room-name { font-family: var(--f-display); font-size: clamp(.95rem, 1.6vw, 1.2rem); font-weight: 400; margin: 0 0 2px; line-height: 1.1; }
-.room-max { font-size: .68rem; color: var(--ink-faint); margin: 0 0 6px; }
-.room-desc {
-  font-size: .72rem; color: var(--ink-soft); margin: 0;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-}
-.room-price { display: flex; align-items: baseline; justify-content: space-between; border-top: 1px solid var(--rule-light); padding-top: 8px; margin-top: 8px; }
-.room-price .rate { font-size: .82rem; font-weight: 700; }
-.room-price .per { font-size: .6rem; color: var(--ink-faint); display: block; font-weight: 500; }
-.room-price .total { font-size: .68rem; color: var(--ink-soft); text-align: right; }
-
-/* forms */
-.form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.form-grid .field.span-2 { grid-column: span 2; }
-.form-grid .field.span-3 { grid-column: span 3; }
-.addr-grid { grid-template-columns: 2fr 1fr; max-width: 520px; margin-inline: auto; width: 100%; }
-.addr-grid .field.span-3 { grid-column: span 2; }
-@media (max-width: 640px) {
-  .form-grid { grid-template-columns: 1fr 1fr; }
-  .form-grid .field.span-2, .form-grid .field.span-3 { grid-column: span 2; }
+@media (max-width: 719px) {
+  .search { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
+  .f-date { grid-column: span 2; min-width: 0; }
+  .f-count { min-width: 0; }
+  .search-nights { display: none; }
+  .search .btn { grid-column: span 2; min-width: 0; margin: 0; padding: 0 var(--s2); font-size: .8125rem; }
+  .step-btn { flex-basis: 28px; }
 }
 
 /* buttons */
 .btn {
-  display: inline-flex; align-items: center; gap: .6em;
-  padding: .85em 1.9em; border: 1px solid var(--bronze-hi); background: var(--bronze-hi);
-  color: var(--ivory); font-size: .74rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
-  text-decoration: none; cursor: pointer; transition: opacity .35s var(--ease);
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  height: var(--input-h); padding: 0 var(--s5); border: 0; border-radius: 6px;
+  background: var(--teal); color: var(--paper); font-size: .875rem; font-weight: 700; white-space: nowrap;
+  transition: background-color var(--t), color var(--t), box-shadow var(--t);
 }
-.btn:hover { opacity: .85; }
-.btn.ghost { background: transparent; color: var(--ink); }
-.btn.ghost:hover { background: var(--ivory); opacity: 1; }
-.proto-note { font-size: .68rem; color: var(--ink-faint); margin: 0 0 0 14px; }
+.btn:hover { background: var(--teal-2); }
+.btn svg { width: 16px; height: 16px; }
+.btn-quiet { background: transparent; color: var(--teal-2); box-shadow: inset 0 0 0 1.5px var(--teal); }
+.btn-quiet:hover { background: var(--teal-wash); }
+.btn[aria-disabled="true"] { background: var(--sand-2); color: var(--navy-2); box-shadow: none; cursor: not-allowed; }
+.btn-cta { height: 44px; }
+.link-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 2px 0; border: 0; background: none;
+  color: var(--teal-2); font-size: .8rem; font-weight: 700; text-decoration: underline; text-underline-offset: 3px;
+}
+.link-btn svg { width: 14px; height: 14px; }
+.link-btn:hover { color: var(--teal); }
+.icon-btn { display: inline-grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--navy-2); }
+.icon-btn:hover { background: var(--sand-2); }
+.icon-btn svg { width: 18px; height: 18px; }
+.btn-back {
+  display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 var(--s3); border: 0; border-radius: 6px;
+  background: none; color: var(--navy-2); font-weight: 700;
+}
+.btn-back:hover { background: var(--sand); color: var(--navy); }
+.btn-back svg { width: 16px; height: 16px; }
 
-footer {
-  flex: 0 0 auto; text-align: center; padding: 6px 0; font-size: .6rem; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--ink-soft); background: var(--paper); border-top: 1px solid var(--rule-light);
+/* ---------- workspace (base = single pane, phones and very short screens) ---------- */
+.workspace { display: grid; min-height: 0; min-width: 0; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; }
+.step { grid-column: 1; grid-row: 1; min-width: 0; min-height: 0; }
+.pane { min-width: 0; min-height: 0; }
+.step-stay { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+.step-stay > .pane { grid-row: 1; }
+.step-stay[data-view="list"] .pane-detail, .step-stay[data-view="detail"] .pane-rail { display: none; }
+.pane-title { margin: 0; font-family: var(--f-display); font-size: 1.35rem; font-weight: 600; line-height: 1.1; }
+.pane-title:focus { outline: none; }
+
+/* room rail — the one internal scroll region */
+.pane-rail { display: flex; flex-direction: column; background: var(--ivory); }
+.rail-head { display: flex; flex: 0 0 auto; align-items: baseline; justify-content: space-between; gap: var(--s3); padding: var(--s4) var(--s5) var(--s2); }
+.rail-meta { font-size: .75rem; color: var(--navy-3); text-align: right; }
+.rail-scroll { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 var(--s2) var(--s3); scrollbar-width: thin; }
+.rooms { display: flex; flex-direction: column; gap: var(--s1); margin: 0; padding: 0; list-style: none; }
+.room-row {
+  display: grid; grid-template-columns: 72px minmax(0, 1fr) 24px; align-items: center; column-gap: var(--s3);
+  height: var(--row-h); flex: 0 0 var(--row-h); padding: var(--s4) var(--s3); border-radius: 8px;
+  cursor: pointer; transition: background-color var(--t), box-shadow var(--t);
 }
-.foot-policies { display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap; }
-.foot-policies a { text-decoration: none; border-bottom: 1px solid transparent; }
-.foot-policies a:hover { border-bottom-color: currentColor; }
-.foot-policies span { color: var(--ink-faint); }
+.room-row:hover { background: var(--sand); }
+.room-row[aria-selected="true"] { background: var(--paper); box-shadow: var(--shadow); }
+.room-row:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+.row-thumb { width: 72px; height: 72px; border-radius: 6px; object-fit: cover; background: var(--sand-2); }
+.row-text { display: flex; flex-direction: column; height: 72px; min-width: 0; }
+.row-name {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  font-family: var(--f-display); font-size: 1.08rem; font-weight: 600; line-height: 1.05;
+}
+.row-beds { display: block; margin-top: 3px; overflow: hidden; font-size: .75rem; line-height: 1.3; color: var(--navy-2); white-space: nowrap; text-overflow: ellipsis; }
+.row-reason { display: flex; align-items: center; gap: 4px; color: var(--error); font-weight: 700; }
+.row-price { display: block; margin-top: auto; font-size: .78rem; line-height: 1.3; color: var(--navy-2); white-space: nowrap; }
+.row-price strong { color: var(--navy); font-size: .85rem; }
+.row-check {
+  display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+  border: 1.5px solid var(--line-strong); background: var(--paper); color: var(--paper);
+  transition: background-color var(--t), border-color var(--t);
+}
+.row-check svg { width: 14px; height: 14px; opacity: 0; }
+.room-row[aria-selected="true"] .row-check { background: var(--teal); border-color: var(--teal); }
+.room-row[aria-selected="true"] .row-check svg { opacity: 1; }
+.room-row[aria-disabled="true"] { cursor: not-allowed; }
+.room-row[aria-disabled="true"]:hover { background: transparent; }
+.room-row[aria-disabled="true"] .row-thumb { filter: grayscale(1); opacity: .55; }
+.room-row[aria-disabled="true"] .row-check { border-style: dashed; background: transparent; }
+
+/* skeletons — same row box as real rooms */
+.room-row.is-skeleton { cursor: default; }
+.room-row.is-skeleton:hover { background: transparent; }
+.sk { display: block; border-radius: 4px; background: linear-gradient(90deg, var(--sand-2) 0%, var(--sand) 50%, var(--sand-2) 100%); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
+.sk-line { height: 12px; margin-bottom: 8px; }
+.sk-line.lg { height: 16px; }
+.row-check.sk { border: 0; }
+@keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
+/* rail states */
+.rail-state { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s2); margin: var(--s1) var(--s2) var(--s3); padding: var(--s5); border-radius: 8px; background: var(--sand); }
+.rail-state-ico { color: var(--teal); }
+.rail-state-ico svg { width: 24px; height: 24px; }
+.rail-state[data-kind="error"], .rail-state[data-kind="empty"] { background: var(--error-wash); }
+.rail-state[data-kind="error"] .rail-state-ico, .rail-state[data-kind="empty"] .rail-state-ico { color: var(--error); }
+.rail-state-title { font-family: var(--f-display); font-size: 1.2rem; font-weight: 600; line-height: 1.15; }
+.rail-state-text { font-size: .85rem; color: var(--navy-2); }
+
+/* detail pane */
+.pane-detail { position: relative; padding: var(--s6) var(--gutter); overflow-y: auto; overscroll-behavior: contain; background: var(--paper); }
+.m1-back { margin-bottom: var(--s3); }
+.detail-inner { display: flex; flex-direction: column; gap: var(--s3); width: 100%; margin-inline: auto; }
+.detail-photo { position: relative; width: 100%; margin: 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; background: var(--sand-2); }
+.detail-photo img { width: 100%; height: 100%; object-fit: cover; }
+.detail[data-state="loading"] .detail-photo img { visibility: hidden; }
+.detail[data-state="loading"] .detail-photo { background: linear-gradient(90deg, var(--sand-2) 0%, var(--sand) 50%, var(--sand-2) 100%); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
+.detail[data-state="idle"] .detail-room, .detail[data-state="idle"] .detail-skel,
+.detail[data-state="loading"] .detail-room, .detail[data-state="loading"] .detail-idle,
+.detail[data-state="room"] .detail-idle, .detail[data-state="room"] .detail-skel { display: none; }
+.detail-idle { display: flex; flex-direction: column; gap: var(--s1); }
+.detail-tagline { font-family: var(--f-display); font-size: 1.6rem; font-style: italic; line-height: 1.15; }
+.detail-place { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--navy-3); }
+.detail-skel { display: flex; flex-direction: column; gap: var(--s2); padding-top: var(--s1); }
+.detail-skel .sk-title { width: 55%; height: 26px; }
+.detail-room { display: flex; flex-direction: column; gap: var(--s3); }
+.detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s4); }
+.detail-name { margin: 0; font-family: var(--f-display); font-size: 1.85rem; font-weight: 500; line-height: 1.05; }
+.detail-name:focus { outline: none; }
+.detail-rate { flex: 0 0 auto; line-height: 1.25; text-align: right; }
+.detail-rate strong { display: block; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.detail-rate span { font-size: .72rem; color: var(--navy-3); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 2px 10px; border-radius: 999px; background: var(--sand); color: var(--navy-2); font-size: .75rem; font-weight: 700; }
+.chip svg { width: 14px; height: 14px; }
+.chip.is-selected { background: var(--teal-wash); color: var(--teal-2); }
+.chip.is-out { background: var(--error-wash); color: var(--error); }
+.detail-desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--navy-2); }
+.facts { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s5); margin: 0; padding: 0; list-style: none; font-size: .82rem; }
+.facts li { display: inline-flex; align-items: center; gap: 6px; }
+.facts svg { width: 18px; height: 18px; color: var(--teal); }
+.fact-occ.is-short { color: var(--error); font-weight: 700; }
+.fact-occ.is-short svg { color: var(--error); }
+.amenities { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--s2); margin: 0; padding: var(--s3) 0 0; list-style: none; box-shadow: inset 0 1px var(--line); }
+.amenity { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; font-size: .72rem; line-height: 1.2; color: var(--navy-2); }
+.amenity svg { width: 22px; height: 22px; color: var(--teal); }
+/* overflow priority, applied in order by fitPane() */
+.fit-1 .fact-size, .fit-2 .detail-desc, .fit-3 .fact-occ, .fit-4 .amenity:nth-child(n+4) { display: none; }
+.fit-4 .amenities { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* steps 2–4 */
+.step-form { display: flex; flex-direction: column; }
+.step-form > .pane-form { flex: 1 1 auto; }
+.pane-form { padding: var(--s6) var(--gutter); overflow-y: auto; overscroll-behavior: contain; background: var(--paper); }
+.form-wrap { display: flex; flex-direction: column; gap: var(--s5); max-width: 880px; }
+.group { min-width: 0; margin: 0; padding: 0; border: 0; }
+.group-title { margin: 0 0 var(--s3); padding: 0; font-family: var(--f-display); font-size: 1.3rem; font-weight: 600; line-height: 1.1; }
+.form-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s1) var(--s4); }
+.form-grid .span-2 { grid-column: span 2; }
+.form-grid .field-msg { min-height: 34px; }
+@media (max-width: 639px) {
+  .form-grid { grid-template-columns: minmax(0, 1fr); }
+  .form-grid .span-2 { grid-column: auto; }
+  .form-grid .field-msg { min-height: 18px; }
+}
+
+/* review */
+.review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s5) var(--s8); max-width: 900px; }
+.review-col { display: flex; flex-direction: column; gap: var(--s5); min-width: 0; }
+.rv-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s2); padding-bottom: var(--s1); box-shadow: inset 0 -1px var(--line); }
+.rv-title { margin: 0; font-family: var(--f-display); font-size: 1.25rem; font-weight: 600; line-height: 1.2; }
+.rv-strong { font-weight: 700; }
+.rv-line { color: var(--navy-2); overflow-wrap: anywhere; }
+.terms { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--s1); color: var(--navy-2); }
+.terms li { display: flex; gap: var(--s2); }
+.terms svg { width: 16px; height: 16px; margin-top: 2px; color: var(--teal); }
+.terms a { color: var(--teal-2); font-weight: 700; text-underline-offset: 3px; }
+@media (max-width: 639px) { .review-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* price rows (summary + review) */
+.price-list { display: flex; flex-direction: column; gap: var(--s1); margin: 0; }
+.pl-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 var(--s3); min-height: 22px; font-size: .82rem; color: var(--navy-2); }
+.pl-row dt { margin: 0; white-space: nowrap; }
+.pl-row dd { margin: 0 0 0 auto; color: var(--navy); font-weight: 700; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pl-total { margin-top: var(--s1); padding-top: var(--s2); box-shadow: inset 0 1px var(--line); color: var(--navy); font-size: .9rem; font-weight: 800; }
+.pl-total dd { font-size: 1.05rem; font-weight: 800; }
+
+/* summary: bottom sheet by default, inline pane on wider screens */
+.pane-summary {
+  position: fixed; z-index: 40; left: 0; right: 0; bottom: 0;
+  width: min(100%, 560px); max-height: min(88dvh, 640px); margin-inline: auto;
+  padding: var(--s5) var(--gutter) calc(var(--s6) + env(safe-area-inset-bottom));
+  overflow-y: auto; overscroll-behavior: contain;
+  border-radius: 14px 14px 0 0; background: var(--sand); box-shadow: var(--shadow);
+  transform: translateY(100%); visibility: hidden;
+  transition: transform .25s cubic-bezier(.2, .7, .1, 1), visibility 0s linear .25s;
+}
+.shell.sheet-open .pane-summary { transform: none; visibility: visible; transition: transform .25s cubic-bezier(.2, .7, .1, 1); }
+.sheet-backdrop { position: fixed; inset: 0; z-index: 39; background: rgba(27, 42, 65, .45); }
+.sum-inner { display: flex; flex-direction: column; gap: var(--s4); }
+.sum-head { display: flex; align-items: center; gap: var(--s3); min-height: 28px; }
+.sum-head .pane-title { margin-right: auto; }
+.sum-room { display: grid; padding-top: var(--s4); box-shadow: inset 0 1px var(--line); }
+.sum-room > * { grid-area: 1 / 1; }
+.sum-room.is-empty .sum-priced { visibility: hidden; }
+.sum-room:not(.is-empty) .sum-empty { visibility: hidden; }
+.sum-empty { display: flex; align-self: start; gap: var(--s2); color: var(--navy-2); font-size: .85rem; }
+.sum-empty svg { width: 18px; height: 18px; margin-top: 1px; color: var(--teal); }
+.sum-room-name { margin-bottom: var(--s2); font-family: var(--f-display); font-size: 1.3rem; font-weight: 600; line-height: 1.1; }
+.sum-note { font-size: .72rem; color: var(--navy-3); }
+.sum-legal { font-size: .7rem; color: var(--navy-3); }
+.sum-legal a { color: var(--navy-2); text-underline-offset: 2px; }
+.tip-wrap { position: relative; display: none; margin-left: 4px; vertical-align: middle; }
+.tip-btn {
+  display: grid; place-items: center; width: 18px; height: 18px; padding: 0; border-radius: 50%;
+  border: 1.5px solid var(--navy-3); background: none; color: var(--navy-2); font: italic 700 .7rem/1 Georgia, serif;
+}
+.tip {
+  position: absolute; z-index: 5; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: 220px; padding: 6px 10px; border-radius: 6px;
+  background: var(--navy); color: var(--paper); font-size: .72rem; font-weight: 500;
+  visibility: hidden; opacity: 0; transition: opacity var(--t);
+}
+.tip-wrap:hover .tip, .tip-btn:focus-visible + .tip { visibility: visible; opacity: 1; }
+.fit-1 .sum-legal, .fit-2 .pl-tax { display: none; }
+.fit-2 .tip-wrap { display: inline-block; }
+
+/* action bar */
+.actionbar {
+  grid-column: 1 / -1; grid-row: 2; min-width: 0;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "msg msg msg" "back toggle cta";
+  align-items: center; gap: var(--s1) var(--s2);
+  padding: var(--s2) var(--gutter) calc(var(--s2) + env(safe-area-inset-bottom));
+  background: var(--paper); box-shadow: inset 0 1px var(--line);
+}
+.ab-back { grid-area: back; }
+.status { grid-area: msg; display: flex; align-items: flex-start; gap: 6px; min-height: 2.8em; font-size: .78rem; line-height: 1.4; color: var(--navy-2); }
+.status-text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.status-ico:empty { display: none; }
+.status-ico svg { width: 16px; height: 16px; margin-top: 1px; }
+.status[data-tone="error"] { color: var(--error); font-weight: 700; }
+.status[data-tone="warn"] { color: var(--navy); font-weight: 700; }
+.status[data-tone="warn"] .status-ico { color: var(--teal); }
+.sheet-toggle {
+  grid-area: toggle; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-width: 0;
+  height: 44px; padding: 0 var(--s3); border: 0; border-radius: 6px; background: var(--sand); text-align: left;
+}
+.st-label { display: flex; align-items: center; gap: 4px; font-size: .66rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--navy-2); }
+.st-label svg { width: 12px; height: 12px; }
+.st-value { max-width: 100%; overflow: hidden; font-size: .85rem; font-weight: 800; white-space: nowrap; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.ab-cta { grid-area: cta; }
+@media (max-width: 479px) {
+  .cta-rest { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .ab-back .btn-back-label { display: none; }
+}
+
+/* single pane on a wide-but-short screen: keep the action bar to one row */
+@media (min-width: 560px) {
+  .actionbar { grid-template-columns: auto minmax(0, 1fr) auto auto; grid-template-areas: "back msg toggle cta"; gap: var(--s3); }
+  .status { align-items: center; min-height: 0; }
+}
+
+/* single-pane header */
+@media (max-width: 639px) {
+  .brand-place, .nav-back, .proto-more { display: none; }
+  .brand-name { font-size: 1.1rem; }
+  .masthead { gap: var(--s3); }
+  .proto-flag { margin-right: 0; font-size: .68rem; }
+  .pstep:not(.is-active) .pstep-label { display: none; }
+  .pstep.is-active { flex: 1 0 auto; }
+  .band-h { font-size: 1.5rem; }
+  .band-sub { font-size: .78rem; }
+}
+
+/* ---------- tablet: rail + detail side by side ---------- */
+@media (min-width: 640px) and (max-width: 959px) and (min-height: 500px) {
+  .workspace { grid-template-rows: minmax(0, 1fr) var(--h-action); }
+  .step-stay { grid-template-columns: minmax(280px, 2fr) minmax(0, 3fr); }
+  .step-stay[data-view] .pane-rail { display: flex; }
+  .step-stay[data-view] .pane-detail { display: block; }
+  .m1-back { display: none; }
+  .pane-detail, .pane-form { overflow: hidden; }
+  .actionbar { grid-template-columns: auto minmax(0, 1fr) auto auto; grid-template-areas: "back msg toggle cta"; gap: var(--s3); padding: 0 var(--gutter); }
+  .status { align-items: center; min-height: 0; }
+}
+@media (min-width: 640px) and (max-width: 959px) and (min-height: 860px) {
+  .workspace { grid-template-rows: minmax(0, 1fr) auto var(--h-action); }
+  .actionbar { grid-row: 3; }
+  .pane-summary { grid-column: 1 / -1; grid-row: 2; padding: var(--s5) var(--gutter); }
+  .sum-inner { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "head head" "facts room" "note legal"; gap: var(--s3) var(--s8); }
+  .sum-head { grid-area: head; } .sum-facts { grid-area: facts; } .sum-room { grid-area: room; padding-top: 0; box-shadow: none; }
+  .sum-note { grid-area: note; } .sum-legal { grid-area: legal; text-align: right; }
+}
+
+/* ---------- desktop: three panes ---------- */
+@media (min-width: 960px) {
+  .workspace {
+    grid-template-columns: minmax(312px, 28fr) minmax(0, 44fr) minmax(272px, 28fr);
+    grid-template-rows: minmax(0, 1fr) var(--h-action);
+  }
+  .step { grid-column: 1 / 3; }
+  .step-stay { grid-template-columns: minmax(312px, 28fr) minmax(0, 44fr); grid-template-columns: subgrid; }
+  .step-stay[data-view] .pane-rail { display: flex; grid-column: 1; }
+  .step-stay[data-view] .pane-detail { display: block; grid-column: 2; }
+  .m1-back { display: none; }
+  .pane-detail, .pane-form { overflow: hidden; }
+  .pane-summary { grid-column: 3; grid-row: 1; padding: var(--s6); }
+  .actionbar {
+    grid-template-columns: minmax(312px, 28fr) minmax(0, 44fr) minmax(272px, 28fr); grid-template-columns: subgrid;
+    grid-template-areas: none; grid-template-rows: minmax(0, 1fr); gap: 0; padding: 0;
+  }
+  .ab-back { grid-area: 1 / 1; justify-self: start; margin-left: var(--s4); }
+  .status { grid-area: 1 / 2; align-items: center; min-height: 0; padding: 0 var(--gutter); }
+  .ab-cta { grid-area: 1 / 3; align-self: stretch; display: flex; align-items: center; padding: 0 var(--s6); background: var(--sand); }
+  .ab-cta .btn { width: 100%; }
+}
+
+/* summary rendered inline (tall tablet, desktop) */
+@media (min-width: 960px), (min-width: 640px) and (min-height: 860px) {
+  .pane-summary {
+    position: relative; z-index: auto; width: auto; max-height: none; margin: 0; overflow: hidden;
+    border-radius: 0; box-shadow: none; transform: none; visibility: visible; transition: none;
+  }
+  .sheet-toggle, .sheet-close, .sheet-backdrop, .only-sheet { display: none !important; }
+}
+
+/* the prototype notice keeps its first sentence wherever the header is tight */
+@media (max-width: 1199px) and (min-width: 640px) { .proto-flag { max-width: 46ch; } }
+@media (max-width: 759px), (max-height: 639px) and (max-width: 1199px) { .proto-more { display: none; } }
+@media (min-width: 960px) and (max-width: 1199px) {
+  .pane-summary { padding: var(--s6) var(--s5); }
+  .ab-cta { padding: 0 var(--s5); }
+}
+
+/* dialog (edit stay) */
+.dialog { width: min(100% - 32px, 480px); max-height: calc(100dvh - 32px); padding: 0; border: 0; border-radius: 12px; background: var(--paper); color: var(--navy); box-shadow: var(--shadow); overflow: hidden; }
+.dialog::backdrop { background: rgba(27, 42, 65, .45); }
+.dialog-body { display: flex; flex-direction: column; gap: var(--s4); padding: var(--s6); }
+.dialog-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }
+.dialog-title { margin: 0; font-family: var(--f-display); font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
+.dialog-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3) var(--s4); }
+.dialog-grid .span-2 { grid-column: 1 / -1; }
+.es-total { font-size: .82rem; color: var(--navy-2); min-height: 1.45em; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: var(--s3); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; animation: none !important; }
+}
 </style>
 </head>
 <body>
 
-<div class="preview-flag">Prototype — not a live booking system. Payment hands off to the resort's real booking engine.</div>
+<div class="shell" id="shell" data-step="0">
 
-<header class="nav">
-  <div class="wrap nav-inner">
-    <a href="landingpage.html" aria-label="Golden Host Resort, back to site">
-      <img class="brand-logo" src="gh_logo.jpg" alt="Golden Host Resort">
+  <header class="masthead">
+    <a class="brand" href="landingpage.html" aria-label="Golden Host Resort, back to the resort site">
+      <img class="brand-logo" src="gh_logo.jpg" alt="" width="32" height="32">
+      <span class="brand-text">
+        <span class="brand-name">Golden Host <em>Resort</em></span>
+        <span class="brand-place">Sarasota, Florida</span>
+      </span>
     </a>
+    <p class="proto-flag"><strong>Prototype</strong> — not a live booking system.<span class="proto-more"> Payment hands off to the resort's real booking engine.</span></p>
     <a class="nav-back" href="landingpage.html">Back to the resort site</a>
-  </div>
-</header>
+  </header>
 
-<div class="hero-img">
-  <p>Relaxation &amp; adventure is just a Mai Tai away.</p>
-</div>
+  <nav class="progress" aria-label="Booking steps">
+    <ol>
+      <li class="pstep"><button type="button" class="pstep-btn" data-goto="0"><span class="pstep-mark" aria-hidden="true">1</span><span class="pstep-label">Stay &amp; Rooms</span><span class="sr-only pstep-state"></span></button></li>
+      <li class="pstep"><button type="button" class="pstep-btn" data-goto="1"><span class="pstep-mark" aria-hidden="true">2</span><span class="pstep-label">Guest Details</span><span class="sr-only pstep-state"></span></button></li>
+      <li class="pstep"><button type="button" class="pstep-btn" data-goto="2"><span class="pstep-mark" aria-hidden="true">3</span><span class="pstep-label">Address</span><span class="sr-only pstep-state"></span></button></li>
+      <li class="pstep"><button type="button" class="pstep-btn" data-goto="3"><span class="pstep-mark" aria-hidden="true">4</span><span class="pstep-label">Review &amp; Confirm</span><span class="sr-only pstep-state"></span></button></li>
+    </ol>
+  </nav>
 
-<div id="app">
-  <form id="booking-form" class="wrap" style="flex:1 1 auto; min-height:0; display:flex; flex-direction:column;">
+  <form id="booking-form" class="booking" novalidate>
 
-    <!-- STEP 1 -->
-    <section class="step is-active" data-step="0">
-      <div class="step-head">
-        <p class="step-count">Step 1 of 3</p>
-        <h1 class="step-title">Your stay &amp; room</h1>
-      </div>
-      <div class="step-body">
-        <div class="stay-row">
-          <div class="field">
-            <label for="arrival">Arrival</label>
+    <div class="band">
+      <div class="band-panel" data-band="0">
+        <h1 class="sr-only" id="title-0" tabindex="-1" data-step-title>Stay and rooms</h1>
+        <div class="search" role="group" aria-label="Dates and guests">
+          <div class="field f-date">
+            <label for="arrival">Check-in</label>
             <input type="date" id="arrival" name="arrival" required>
           </div>
-          <div class="field">
-            <label for="departure">Departure</label>
+          <div class="field f-date">
+            <label for="departure">Check-out</label>
             <input type="date" id="departure" name="departure" required>
           </div>
-          <span class="nights-badge" id="nights-badge">&mdash; nights</span>
-        </div>
-
-        <div class="room-grid" id="room-grid">
-          <label class="room-card">
-            <input type="radio" name="room" value="King Studio" required>
-            <div>
-              <p class="room-avail">32 rooms available</p>
-              <h3 class="room-name">King Studio</h3>
-              <p class="room-max">Max 2 guests</p>
-              <p class="room-desc">King bed in a studio with vintage decor &mdash; atomic-inspired lamps and bold patterns. Free Wi-Fi, flat-screen TV.</p>
-            </div>
-            <div class="room-price">
-              <span class="rate">$73.50&ndash;$81.75<span class="per">/night + tax</span></span>
-              <span class="total">$267.81 total</span>
-            </div>
-          </label>
-
-          <label class="room-card">
-            <input type="radio" name="room" value="2 Queen Suite Poolside" required>
-            <div>
-              <p class="room-avail">18 rooms available</p>
-              <h3 class="room-name">2 Queen Suite Poolside</h3>
-              <p class="room-max">Max 4 guests</p>
-              <p class="room-desc">Two queen beds in a poolside suite, steps from the 50-foot heated saltwater pool. Vintage decor.</p>
-            </div>
-            <div class="room-price">
-              <span class="rate">$87.00&ndash;$99.75<span class="per">/night + tax</span></span>
-              <span class="total">$323.74 total</span>
-            </div>
-          </label>
-
-          <label class="room-card">
-            <input type="radio" name="room" value="King Suite Poolside" required>
-            <div>
-              <p class="room-avail">7 rooms available</p>
-              <h3 class="room-name">King Suite Poolside</h3>
-              <p class="room-max">Max 4 guests</p>
-              <p class="room-desc">King bed in a poolside suite, steps from the heated saltwater pool. Vintage decor, free Wi-Fi.</p>
-            </div>
-            <div class="room-price">
-              <span class="rate">$87.00&ndash;$99.75<span class="per">/night + tax</span></span>
-              <span class="total">$323.74 total</span>
-            </div>
-          </label>
-
-          <label class="room-card">
-            <input type="radio" name="room" value="King Suite Accessible Poolside" required>
-            <div>
-              <p class="room-avail">3 rooms available</p>
-              <h3 class="room-name">King Suite Accessible Poolside</h3>
-              <p class="room-max">Max 4 guests</p>
-              <p class="room-desc">Accessible poolside suite with a king bed, steps from the heated saltwater pool. Vintage decor.</p>
-            </div>
-            <div class="room-price">
-              <span class="rate">$87.00&ndash;$99.75<span class="per">/night + tax</span></span>
-              <span class="total">$323.74 total</span>
-            </div>
-          </label>
-        </div>
-      </div>
-      <div class="step-nav">
-        <span class="spacer"></span>
-        <button type="button" class="btn" data-next>Next</button>
-      </div>
-    </section>
-
-    <!-- STEP 2 -->
-    <section class="step" data-step="1">
-      <div class="step-head">
-        <p class="step-count">Step 2 of 3</p>
-        <h1 class="step-title">Guest details</h1>
-      </div>
-      <div class="step-body">
-        <div class="form-grid" style="max-width:720px; margin-inline:auto; width:100%;">
-          <div class="field span-3">
-            <label for="full-name">Full name *</label>
-            <input type="text" id="full-name" name="full-name" required>
-          </div>
-          <div class="field span-2">
-            <label for="email">Email *</label>
-            <input type="email" id="email" name="email" required>
-          </div>
-          <div class="field">
-            <label for="phone">Phone *</label>
-            <input type="tel" id="phone" name="phone" required>
-          </div>
-          <div class="field span-2">
-            <label for="company">Company</label>
-            <input type="text" id="company" name="company">
-          </div>
-          <div class="field">
-            <label for="arrival-time">Arrival time</label>
-            <input type="text" id="arrival-time" name="arrival-time" placeholder="e.g. 3 PM">
-          </div>
-          <div class="field">
+          <p class="search-nights" id="search-nights"></p>
+          <div class="field f-count">
             <label for="adults">Adults</label>
-            <input type="number" id="adults" name="adults" min="1" max="8" value="2">
+            <div class="stepper">
+              <button type="button" class="step-btn" data-for="adults" data-delta="-1" tabindex="-1" aria-label="Fewer adults">&minus;</button>
+              <input type="number" id="adults" name="adults" min="1" max="8" value="2" inputmode="numeric" required>
+              <button type="button" class="step-btn" data-for="adults" data-delta="1" tabindex="-1" aria-label="More adults">+</button>
+            </div>
           </div>
-          <div class="field">
+          <div class="field f-count">
             <label for="children">Children</label>
-            <input type="number" id="children" name="children" min="0" max="8" value="0">
+            <div class="stepper">
+              <button type="button" class="step-btn" data-for="children" data-delta="-1" tabindex="-1" aria-label="Fewer children">&minus;</button>
+              <input type="number" id="children" name="children" min="0" max="8" value="0" inputmode="numeric">
+              <button type="button" class="step-btn" data-for="children" data-delta="1" tabindex="-1" aria-label="More children">+</button>
+            </div>
           </div>
-          <div class="field span-3">
-            <label for="requests">Requests</label>
-            <input type="text" id="requests" name="requests" placeholder="Early check-in, accessible room, etc.">
-          </div>
+          <button type="button" class="btn" id="check-avail-btn">Check availability</button>
         </div>
       </div>
-      <div class="step-nav">
-        <button type="button" class="btn ghost" data-back>Back</button>
-        <span class="spacer"></span>
-        <button type="button" class="btn" data-next>Next</button>
-      </div>
-    </section>
 
-    <!-- STEP 3 -->
-    <section class="step" data-step="2">
-      <div class="step-head">
-        <p class="step-count">Step 3 of 3</p>
-        <h1 class="step-title">Your address</h1>
+      <div class="band-panel band-title" data-band="1" hidden>
+        <h1 class="band-h" id="title-1" tabindex="-1" data-step-title>Guest details</h1>
+        <p class="band-sub">Who's staying. Fields marked <span aria-hidden="true">*</span><span class="sr-only">with an asterisk</span> are required.</p>
       </div>
-      <div class="step-body">
-        <div class="form-grid addr-grid">
-          <div class="field">
-            <label for="street">Street *</label>
-            <input type="text" id="street" name="street" required>
+      <div class="band-panel band-title" data-band="2" hidden>
+        <h1 class="band-h" id="title-2" tabindex="-1" data-step-title>Your address</h1>
+        <p class="band-sub">The lead guest's home address. Fields marked <span aria-hidden="true">*</span><span class="sr-only">with an asterisk</span> are required.</p>
+      </div>
+      <div class="band-panel band-title" data-band="3" hidden>
+        <h1 class="band-h" id="title-3" tabindex="-1" data-step-title>Review &amp; confirm</h1>
+        <p class="band-sub">Check your details before you continue to payment.</p>
+      </div>
+    </div>
+
+    <div class="workspace" id="workspace">
+
+      <!-- STEP 1: stay & rooms -->
+      <section class="step step-stay" data-step="0" data-view="list" aria-labelledby="title-0">
+        <div class="pane pane-rail">
+          <div class="rail-head">
+            <h2 class="pane-title" id="rail-title">Rooms</h2>
+            <p class="rail-meta" id="rail-meta"></p>
           </div>
-          <div class="field">
-            <label for="zip">ZIP *</label>
-            <input type="text" id="zip" name="zip" required>
-          </div>
-          <div class="field">
-            <label for="city">City *</label>
-            <input type="text" id="city" name="city" required>
-          </div>
-          <div class="field">
-            <label for="state">State *</label>
-            <input type="text" id="state" name="state" required>
-          </div>
-          <div class="field span-3">
-            <label for="country">Country</label>
-            <input type="text" id="country" name="country" value="United States">
+          <div class="rail-scroll" id="rail-scroll">
+            <div class="rail-state" id="rail-state">
+              <span class="rail-state-ico" id="rail-state-ico" aria-hidden="true"></span>
+              <p class="rail-state-title" id="rail-state-title"></p>
+              <p class="rail-state-text" id="rail-state-text"></p>
+            </div>
+            <ul class="rooms" id="room-skeletons" aria-hidden="true" hidden></ul>
+            <ul class="rooms" id="room-list" role="listbox" aria-labelledby="rail-title" aria-describedby="rail-hint" hidden></ul>
+            <p class="sr-only" id="rail-hint">Use the up and down arrow keys to compare rooms. Press Enter to select one.</p>
           </div>
         </div>
-      </div>
-      <div class="step-nav">
-        <button type="button" class="btn ghost" data-back>Back</button>
-        <span class="spacer"></span>
-        <p class="proto-note"><strong>Not booked yet</strong> &mdash; continues to the live booking engine.</p>
-        <button type="submit" class="btn">Proceed to Payment</button>
-      </div>
-    </section>
 
+        <div class="pane pane-detail" id="pane-detail">
+          <div class="m1-back">
+            <button type="button" class="link-btn" id="detail-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>All rooms</button>
+          </div>
+          <div class="detail" id="detail" data-state="idle">
+            <div class="detail-inner" id="detail-inner">
+              <figure class="detail-photo"><img id="detail-img" src="gl-showcase/702b7f33.webp" alt="The resort's pool and two-story guest wing at dusk"></figure>
+              <div class="detail-idle">
+                <p class="detail-tagline">Relaxation &amp; adventure is just a Mai Tai away.</p>
+                <p class="detail-place">Golden Host Resort · Sarasota, Florida</p>
+              </div>
+              <div class="detail-skel" aria-hidden="true">
+                <span class="sk sk-title"></span>
+                <span class="sk sk-line" style="width: 92%"></span>
+                <span class="sk sk-line" style="width: 64%"></span>
+              </div>
+              <div class="detail-room">
+                <div class="detail-head">
+                  <h2 class="detail-name" id="detail-name" tabindex="-1"></h2>
+                  <p class="detail-rate"><strong id="detail-rate"></strong><span>per night + tax</span></p>
+                </div>
+                <div class="chips">
+                  <span class="chip" id="chip-avail"></span>
+                  <span class="chip" id="chip-sel"></span>
+                </div>
+                <p class="detail-desc" id="detail-desc"></p>
+                <ul class="facts" aria-label="Room facts">
+                  <li class="fact-beds"><span class="fact-ico" data-icon="bed"></span><span id="fact-beds"></span></li>
+                  <li class="fact-occ" id="fact-occ-li"><span class="fact-ico" data-icon="people"></span><span id="fact-occ"></span></li>
+                  <li class="fact-size"><span class="fact-ico" data-icon="size"></span><span id="fact-size"></span></li>
+                </ul>
+                <ul class="amenities" id="amenities" aria-label="Amenities"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: guest details -->
+      <section class="step step-form" data-step="1" aria-labelledby="title-1" hidden>
+        <div class="pane pane-form">
+          <div class="form-wrap">
+            <fieldset class="group">
+              <legend class="group-title">Lead guest</legend>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="full-name">Full name <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="full-name" name="full-name" autocomplete="name" required aria-describedby="full-name-msg">
+                  <p class="field-msg" id="full-name-msg"></p>
+                </div>
+                <div class="field">
+                  <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+                  <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required aria-describedby="email-msg">
+                  <p class="field-msg" id="email-msg"></p>
+                </div>
+                <div class="field">
+                  <label for="phone">Phone <span class="req" aria-hidden="true">*</span></label>
+                  <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" required aria-describedby="phone-msg">
+                  <p class="field-msg" id="phone-msg"></p>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="group">
+              <legend class="group-title">Optional details</legend>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="arrival-time">Arrival time</label>
+                  <input type="text" id="arrival-time" name="arrival-time" placeholder="e.g. 3 PM">
+                  <p class="field-msg"></p>
+                </div>
+                <div class="field">
+                  <label for="company">Company</label>
+                  <input type="text" id="company" name="company" autocomplete="organization">
+                  <p class="field-msg"></p>
+                </div>
+                <div class="field">
+                  <label for="requests">Requests</label>
+                  <input type="text" id="requests" name="requests" placeholder="Early check-in, accessible room, etc.">
+                  <p class="field-msg"></p>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3: address -->
+      <section class="step step-form" data-step="2" aria-labelledby="title-2" hidden>
+        <div class="pane pane-form">
+          <div class="form-wrap">
+            <fieldset class="group">
+              <legend class="group-title">Home address</legend>
+              <div class="form-grid">
+                <div class="field span-2">
+                  <label for="street">Street address <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="street" name="street" autocomplete="address-line1" required aria-describedby="street-msg">
+                  <p class="field-msg" id="street-msg"></p>
+                </div>
+                <div class="field">
+                  <label for="city">City <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="city" name="city" autocomplete="address-level2" required aria-describedby="city-msg">
+                  <p class="field-msg" id="city-msg"></p>
+                </div>
+                <div class="field">
+                  <label for="state">State / Province <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="state" name="state" autocomplete="address-level1" required aria-describedby="state-msg">
+                  <p class="field-msg" id="state-msg"></p>
+                </div>
+                <div class="field">
+                  <label for="zip">ZIP / Postal code <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="zip" name="zip" autocomplete="postal-code" inputmode="numeric" required aria-describedby="zip-msg">
+                  <p class="field-msg" id="zip-msg"></p>
+                </div>
+                <div class="field">
+                  <label for="country">Country</label>
+                  <select id="country" name="country" autocomplete="country-name">
+                    <option value="United States" selected>United States</option>
+                    <option value="Canada">Canada</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Mexico">Mexico</option>
+                    <option value="Germany">Germany</option>
+                    <option value="France">France</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <p class="field-msg"></p>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 4: review & confirm -->
+      <section class="step step-form" data-step="3" aria-labelledby="title-3" hidden>
+        <div class="pane pane-form">
+          <div class="review-grid">
+            <div class="review-col">
+              <section class="rv-block only-sheet" aria-labelledby="rv-stay-h">
+                <div class="rv-head">
+                  <h2 class="rv-title" id="rv-stay-h">Your stay</h2>
+                  <button type="button" class="link-btn edit-stay-open">Edit<span class="sr-only"> your stay</span></button>
+                </div>
+                <p class="rv-strong" id="rv-room">&mdash;</p>
+                <p class="rv-line" id="rv-dates">&mdash;</p>
+                <p class="rv-line" id="rv-party">&mdash;</p>
+              </section>
+              <section class="rv-block" aria-labelledby="rv-guest-h">
+                <div class="rv-head">
+                  <h2 class="rv-title" id="rv-guest-h">Guest details</h2>
+                  <button type="button" class="link-btn" data-goto="1">Edit<span class="sr-only"> guest details</span></button>
+                </div>
+                <p class="rv-strong" id="rv-guest-name">&mdash;</p>
+                <p class="rv-line" id="rv-guest-contact">&mdash;</p>
+                <p class="rv-line" id="rv-guest-requests">&mdash;</p>
+              </section>
+              <section class="rv-block" aria-labelledby="rv-address-h">
+                <div class="rv-head">
+                  <h2 class="rv-title" id="rv-address-h">Address</h2>
+                  <button type="button" class="link-btn" data-goto="2">Edit<span class="sr-only"> address</span></button>
+                </div>
+                <p class="rv-line" id="rv-address">&mdash;</p>
+              </section>
+            </div>
+            <div class="review-col">
+              <section class="rv-block only-sheet" aria-labelledby="rv-price-h">
+                <div class="rv-head"><h2 class="rv-title" id="rv-price-h">Price</h2></div>
+                <dl class="price-list">
+                  <div class="pl-row"><dt>Nightly rate</dt><dd id="rv-rate">&mdash;</dd></div>
+                  <div class="pl-row"><dt id="rv-sub-label">Subtotal</dt><dd id="rv-sub">&mdash;</dd></div>
+                  <div class="pl-row"><dt>Taxes (13%)</dt><dd id="rv-tax">&mdash;</dd></div>
+                  <div class="pl-row pl-total"><dt>Estimated total</dt><dd id="rv-total">&mdash;</dd></div>
+                </dl>
+              </section>
+              <section class="rv-block" aria-labelledby="rv-terms-h">
+                <div class="rv-head"><h2 class="rv-title" id="rv-terms-h">Booking terms</h2></div>
+                <ul class="terms">
+                  <li><span class="term-ico" data-icon="check"></span><span id="rv-cancel">Free cancellation through &mdash;</span></li>
+                  <li><span class="term-ico" data-icon="clock"></span><span>Check-in from 3 PM &middot; check-out by 11 AM</span></li>
+                  <li><span class="term-ico" data-icon="doc"></span><a href="#">Read the cancellation &amp; property policies</a></li>
+                </ul>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- "Your stay" summary -->
+      <aside class="pane pane-summary" id="summary" aria-labelledby="summary-title">
+        <div class="sum-inner" id="sum-inner">
+          <div class="sum-head">
+            <h2 class="pane-title" id="summary-title" tabindex="-1">Your stay</h2>
+            <button type="button" class="link-btn edit-stay-open" id="sum-edit" hidden>Edit<span class="sr-only"> your stay</span></button>
+            <button type="button" class="icon-btn sheet-close" id="sheet-close" aria-label="Close stay summary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          </div>
+          <dl class="price-list sum-facts">
+            <div class="pl-row"><dt>Check-in</dt><dd id="sum-in">&mdash;</dd></div>
+            <div class="pl-row"><dt>Check-out</dt><dd id="sum-out">&mdash;</dd></div>
+            <div class="pl-row"><dt>Nights</dt><dd id="sum-nights">&mdash;</dd></div>
+            <div class="pl-row"><dt>Guests</dt><dd id="sum-guests">&mdash;</dd></div>
+          </dl>
+          <div class="sum-room is-empty" id="sum-room-block">
+            <p class="sum-empty"><span class="sum-empty-ico" data-icon="info"></span><span id="sum-empty-text">Select a room to see your estimated total.</span></p>
+            <div class="sum-priced">
+              <p class="sum-room-name" id="sum-room">&mdash;</p>
+              <dl class="price-list">
+                <div class="pl-row"><dt>Nightly rate</dt><dd id="sum-rate">&mdash;</dd></div>
+                <div class="pl-row"><dt id="sum-sub-label">Subtotal</dt><dd id="sum-sub">&mdash;</dd></div>
+                <div class="pl-row pl-tax"><dt>Taxes (13%)</dt><dd id="sum-tax">&mdash;</dd></div>
+                <div class="pl-row pl-total">
+                  <dt>Estimated total<span class="tip-wrap"><button type="button" class="tip-btn" aria-label="Tax details" aria-describedby="sum-tip">i</button><span class="tip" role="tooltip" id="sum-tip">Includes taxes (13%): <span id="sum-tip-tax">&mdash;</span></span></span></dt>
+                  <dd id="sum-total">&mdash;</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          <p class="sum-note">Estimate only. The final price, including any fees, is confirmed at payment.</p>
+          <p class="sum-legal">&copy; Guest Logic LLC &middot; <a href="#">Privacy Policy</a> &middot; <a href="#">Terms of Use</a></p>
+        </div>
+      </aside>
+
+      <!-- action bar -->
+      <div class="actionbar">
+        <button type="button" class="btn-back ab-back" id="back-btn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg><span class="btn-back-label">Back</span></button>
+        <p class="status" id="status" role="status"><span class="status-ico" id="status-ico" aria-hidden="true"></span><span class="status-text" id="status-text"></span></p>
+        <button type="button" class="sheet-toggle" id="sheet-toggle" aria-controls="summary" aria-expanded="false">
+          <span class="st-label">Your stay <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></span>
+          <span class="st-value" id="st-value">Select a room</span>
+        </button>
+        <div class="ab-cta">
+          <button type="button" class="btn btn-cta" id="primary"><span><span id="cta-verb">Continue</span><span class="cta-rest" id="cta-rest"> to Guest Details</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+        </div>
+      </div>
+
+    </div>
   </form>
 </div>
 
-<footer>
-  <div class="foot-policies">
-    <span>Golden Host Resort &middot; Sarasota, FL</span>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Terms of Use</a>
-    <span>&copy; Guest Logic LLC</span>
+<div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+
+<dialog class="dialog" id="edit-stay" aria-labelledby="edit-stay-title">
+  <div class="dialog-body">
+    <div class="dialog-head">
+      <h2 class="dialog-title" id="edit-stay-title">Edit your stay</h2>
+      <button type="button" class="icon-btn" id="edit-stay-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="dialog-grid">
+      <div class="field">
+        <label for="es-arrival">Check-in</label>
+        <input type="date" id="es-arrival" autofocus>
+      </div>
+      <div class="field">
+        <label for="es-departure">Check-out</label>
+        <input type="date" id="es-departure" aria-describedby="es-error">
+      </div>
+      <div class="field span-2">
+        <label for="es-room">Room</label>
+        <select id="es-room"></select>
+      </div>
+    </div>
+    <p class="field-msg" id="es-error" role="alert"></p>
+    <p class="es-total" id="es-total"></p>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-quiet" id="es-cancel">Cancel</button>
+      <button type="button" class="btn" id="es-save">Save changes</button>
+    </div>
   </div>
-</footer>
+</dialog>
 
 <script>
 (function () {
-  var form = document.getElementById("booking-form");
-  var steps = Array.prototype.slice.call(form.querySelectorAll(".step"));
-  var current = 0;
+  "use strict";
 
-  function showStep(i) {
-    current = i;
-    steps.forEach(function (s, idx) { s.classList.toggle("is-active", idx === i); });
+  var TAX_RATE = 0.13;
+  var DRAFT_KEY = "ghBookingDraftV2";
+  var BOOKING_ENGINE = "https://guestlogic.ai/#/book/golden-host";
+  var RESORT_PHOTO = "gl-showcase/702b7f33.webp";
+  var RESORT_PHOTO_ALT = "The resort's pool and two-story guest wing at dusk";
+
+  /* Room inventory. The prototype has no live availability API, so this is its only room data source. */
+  var ROOMS = [
+    {
+      name: "King Studio",
+      photo: "room-revamp/Studio-1 King Bed.avif",
+      rateLow: 73.50, rateHigh: 81.75, sleeps: 2, beds: "1 King Bed", size: "23 m²", left: 32,
+      desc: "King bed in a studio with vintage decor — atomic-inspired lamps and bold patterns.",
+      groups: [
+        { label: "Accessibility", items: ["Access via exterior corridors", "Braille/raised signage", "Visual fire alarm"] },
+        { label: "Bathroom", items: ["Free toiletries", "Hair dryer", "Private bathroom", "Shower", "Towels"] },
+        { label: "Bedroom", items: ["Air conditioning (climate-controlled)", "Bed sheets", "Blackout drapes", "Down comforter", "Pillowtop mattress", "Premium bedding"] },
+        { label: "Entertainment", items: ["TV with cable channels"] },
+        { label: "Food & drink", items: ["Coffee/tea maker", "Microwave", "Refrigerator"] },
+        { label: "Internet", items: ["Free WiFi"] },
+        { label: "More", items: ["Connecting rooms available", "Cribs not available", "Desk", "Free local calls", "Housekeeping (daily)", "Iron/ironing board", "Phone", "Soundproofed rooms", "Wardrobe or closet"] }
+      ]
+    },
+    {
+      name: "2 Queen Suite Poolside",
+      photo: "room-revamp/Premium Double Room-2 Queen Beds-Balcony-Patio-Pool View.avif",
+      rateLow: 87.00, rateHigh: 99.75, sleeps: 4, beds: "2 Queen Beds", size: "33 m²", left: 18,
+      desc: "Two queen beds in a poolside suite, steps from the 50-foot heated saltwater pool.",
+      groups: [
+        { label: "Accessibility", items: ["Access via exterior corridors", "Braille/raised signage", "Visual fire alarm"] },
+        { label: "Bathroom", items: ["Free toiletries", "Hair dryer", "Private bathroom", "Shower", "Towels"] },
+        { label: "Bedroom", items: ["Air conditioning (climate-controlled)", "Bed sheets", "Blackout drapes", "Down comforter", "Pillowtop mattress", "Premium bedding", "Rollaway/extra bed not available"] },
+        { label: "Entertainment", items: ["TV with cable channels"] },
+        { label: "Food & drink", items: ["Coffee/tea maker", "Microwave", "Refrigerator"] },
+        { label: "Internet", items: ["Free WiFi"] },
+        { label: "Outdoor space", items: ["Furnished balcony or patio"] },
+        { label: "Safety", items: ["Smoke detector", "First aid kit", "Security system"] },
+        { label: "More", items: ["Connecting rooms available", "Cribs not available", "Desk", "Free local calls", "Housekeeping (daily)", "Iron/ironing board", "Phone", "Pool view", "Soundproofed rooms", "Wardrobe or closet"] }
+      ]
+    },
+    {
+      name: "King Suite Poolside",
+      photo: "room-revamp/PremiumRoom-1 King Bed-Balcony-Patio Pool View.avif",
+      rateLow: 87.00, rateHigh: 99.75, sleeps: 4, beds: "1 King Bed + 1 Queen Sofa Bed", size: "33 m²", left: 7,
+      desc: "King bed in a poolside suite, steps from the heated saltwater pool. Vintage decor, free Wi-Fi.",
+      groups: [
+        { label: "Accessibility", items: ["Access via exterior corridors", "Braille/raised signage", "Visual fire alarm"] },
+        { label: "Bathroom", items: ["Free toiletries", "Hair dryer", "Private bathroom", "Shower", "Towels"] },
+        { label: "Bedroom", items: ["Air conditioning (climate-controlled)", "Bed sheets", "Blackout drapes", "Down comforter", "Pillowtop mattress", "Premium bedding"] },
+        { label: "Entertainment", items: ["TV with cable channels"] },
+        { label: "Food & drink", items: ["Coffee/tea maker", "Microwave", "Refrigerator"] },
+        { label: "Internet", items: ["Free WiFi"] },
+        { label: "Outdoor space", items: ["Furnished balcony or patio"] },
+        { label: "Safety", items: ["Smoke detector", "First aid kit", "Security system"] },
+        { label: "More", items: ["Connecting rooms available", "Cribs not available", "Desk", "Free local calls", "Housekeeping (daily)", "Iron/ironing board", "Phone", "Pool view", "Soundproofed rooms", "Wardrobe or closet"] }
+      ]
+    },
+    {
+      name: "King Suite Accessible Poolside",
+      photo: "room-revamp/Premium Room-1 King Bed-Patio-Pool View-Accessible.avif",
+      rateLow: 87.00, rateHigh: 99.75, sleeps: 2, beds: "1 King Bed", size: "33 m²", left: 3,
+      desc: "Accessible poolside suite with a king bed, steps from the heated saltwater pool.",
+      groups: [
+        { label: "Accessibility", items: ["Access via exterior corridors", "Braille/raised signage", "Visual fire alarm", "Wheelchair accessibility", "Wheelchair-width doorways"] },
+        { label: "Bathroom", items: ["Free toiletries", "Hair dryer", "Private bathroom", "Shower", "Towels"] },
+        { label: "Bedroom", items: ["Air conditioning (climate-controlled)", "Bed sheets", "Blackout drapes", "Down comforter", "Pillowtop mattress", "Premium bedding", "Rollaway/extra bed not available"] },
+        { label: "Entertainment", items: ["TV with cable channels"] },
+        { label: "Food & drink", items: ["Coffee/tea maker", "Microwave", "Refrigerator"] },
+        { label: "Internet", items: ["Free WiFi"] },
+        { label: "Outdoor space", items: ["Patio"] },
+        { label: "Safety", items: ["Smoke detector", "First aid kit", "Security system"] },
+        { label: "More", items: ["Connecting rooms available", "Cribs not available", "Desk", "Free local calls", "Housekeeping (daily)", "Iron/ironing board", "Phone", "Pool view", "Soundproofed rooms", "Wardrobe or closet"] }
+      ]
+    }
+  ];
+
+  /* Amenity icons, in display priority. Only amenities a room actually lists are shown, capped at 5. */
+  var AMENITIES = [
+    { match: "Wheelchair accessibility", label: "Wheelchair accessible", icon: "access" },
+    { match: "Pool view", label: "Pool view", icon: "pool" },
+    { match: "Furnished balcony or patio", label: "Balcony or patio", icon: "patio" },
+    { match: "Patio", label: "Patio", icon: "patio" },
+    { match: "Free WiFi", label: "Free Wi-Fi", icon: "wifi" },
+    { match: "Air conditioning (climate-controlled)", label: "Air conditioning", icon: "ac" },
+    { match: "Coffee/tea maker", label: "Coffee/tea maker", icon: "coffee" },
+    { match: "Refrigerator", label: "Refrigerator", icon: "fridge" },
+    { match: "Microwave", label: "Microwave", icon: "microwave" },
+    { match: "TV with cable channels", label: "Cable TV", icon: "tv" }
+  ];
+
+  var ICONS = {
+    check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+    alert: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.01"/>',
+    calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+    ring: '<circle cx="12" cy="12" r="7.5"/>',
+    door: '<path d="M6 21V4.5A1.5 1.5 0 0 1 7.5 3h9A1.5 1.5 0 0 1 18 4.5V21"/><path d="M4 21h16M14.5 12.5v.01"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+    bed: '<path d="M3 19v-6.5A2.5 2.5 0 0 1 5.5 10h13a2.5 2.5 0 0 1 2.5 2.5V19"/><path d="M3 16h18M6 10V7.5A1.5 1.5 0 0 1 7.5 6h3A1.5 1.5 0 0 1 12 7.5V10"/>',
+    people: '<circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9" r="2.4"/><path d="M15.8 14.1A4.6 4.6 0 0 1 21 18.6"/>',
+    size: '<rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M4 9h3M4 14h3M9 4v3M14 4v3"/>',
+    wifi: '<path d="M2 9a15 15 0 0 1 20 0"/><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5 5 0 0 1 7 0"/><path d="M12 19.5v.01"/>',
+    pool: '<path d="M8 14V5.5a2 2 0 0 1 4 0M14 14V5.5a2 2 0 0 1 4 0M8 8h6M8 11h6"/><path d="M2 18c1.7 0 1.7-1 3.3-1s1.7 1 3.4 1 1.6-1 3.3-1 1.7 1 3.3 1 1.7-1 3.4-1 1.6 1 3.3 1"/>',
+    patio: '<path d="M6 11V4h12v7M3 11h18M3 20h18M5 11v9M9.5 11v9M14.5 11v9M19 11v9"/>',
+    ac: '<path d="M12 2.5v19M3.8 7.25l16.4 9.5M20.2 7.25 3.8 16.75"/><path d="m9.5 4.5 2.5 2 2.5-2M9.5 19.5l2.5-2 2.5 2"/>',
+    coffee: '<path d="M4 9h12v4.5A5.5 5.5 0 0 1 10.5 19h-1A5.5 5.5 0 0 1 4 13.5Z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8 3.5V6M12 3.5V6"/>',
+    fridge: '<rect x="6" y="2.5" width="12" height="19" rx="2"/><path d="M6 10h12M9 6v1.5M9 13v3"/>',
+    microwave: '<rect x="2.5" y="5" width="19" height="14" rx="2"/><rect x="5.5" y="8" width="9.5" height="8" rx="1"/><path d="M18.5 9v.01M18.5 12v.01M18.5 15v.01"/>',
+    tv: '<rect x="2.5" y="6.5" width="19" height="13" rx="2"/><path d="m8 2.5 4 4 4-4"/>',
+    access: '<circle cx="11" cy="4" r="1.6"/><path d="M11 7.5v5.5h4.5l2.5 5"/><path d="M8 10.8a5.5 5.5 0 1 0 7.4 7.2"/>'
+  };
+
+  function svg(name) {
+    return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + ICONS[name] + "</svg>";
+  }
+  function $(id) { return document.getElementById(id); }
+
+  var form = $("booking-form"), shell = $("shell");
+  var arrival = $("arrival"), departure = $("departure"), adultsInput = $("adults"), childrenInput = $("children");
+  var checkBtn = $("check-avail-btn");
+  var stayStep = form.querySelector(".step-stay");
+  var railScroll = $("rail-scroll"), list = $("room-list"), skeletons = $("room-skeletons");
+  var railState = $("rail-state");
+  var paneDetail = $("pane-detail"), detail = $("detail"), detailInner = $("detail-inner"), detailImg = $("detail-img");
+  var summary = $("summary"), sumInner = $("sum-inner");
+  var statusEl = $("status"), statusText = $("status-text"), statusIco = $("status-ico");
+  var primary = $("primary"), backBtn = $("back-btn");
+  var sheetToggle = $("sheet-toggle"), sheetBackdrop = $("sheet-backdrop");
+  var steps = [].slice.call(form.querySelectorAll(".step"));
+  var bands = [].slice.call(form.querySelectorAll("[data-band]"));
+  var pSteps = [].slice.call(document.querySelectorAll(".pstep"));
+
+  /* must match the layout media queries in the stylesheet */
+  var mqInline = window.matchMedia("(min-width: 960px), (min-width: 640px) and (min-height: 860px)");
+  var mqSingle = window.matchMedia("(max-width: 639px), (max-width: 959px) and (max-height: 499px)");
+
+  var CTA = [["Continue", " to Guest Details"], ["Continue", " to Address"], ["Continue", " to Review"], ["Proceed", " to Payment"]];
+
+  var state = {
+    step: 0, maxReached: 0,
+    avail: "idle",          // idle | loading | ready
+    searchErr: null,        // { el, msg } for the dates/guests band
+    selected: null,         // room chosen for the stay
+    viewed: null,           // room shown in the detail pane (focus can preview without selecting)
+    focusName: null,        // roving tabindex target in the rail
+    view: "list",           // single-pane layout: "list" or "detail"
+    nudge: false,           // the guest tried to continue before finishing this step
+    sheet: false, submitted: false, touched: {}
+  };
+
+  document.querySelectorAll("[data-icon]").forEach(function (el) { el.innerHTML = svg(el.dataset.icon); });
+
+  /* ---------- helpers ---------- */
+  function roomByName(name) {
+    for (var i = 0; i < ROOMS.length; i++) if (ROOMS[i].name === name) return ROOMS[i];
+    return null;
+  }
+  function isOpen(room) { return room.left > 0; }
+  function firstOpen() {
+    for (var i = 0; i < ROOMS.length; i++) if (isOpen(ROOMS[i])) return ROOMS[i];
+    return ROOMS[0];
+  }
+  function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+  function iso(d) { var z = new Date(d.getTime() - d.getTimezoneOffset() * 60000); return z.toISOString().slice(0, 10); }
+  function addDays(value, n) { var d = new Date(value + "T00:00:00"); d.setDate(d.getDate() + n); return iso(d); }
+  function computeNights() {
+    var a = Date.parse(arrival.value), b = Date.parse(departure.value);
+    if (isNaN(a) || isNaN(b) || b <= a) return 0;
+    return Math.round((b - a) / 864e5);
+  }
+  function fmtDay(value, withYear) {
+    var d = new Date(value + "T00:00:00");
+    if (isNaN(d.getTime())) return "";
+    var opts = { weekday: "short", month: "short", day: "numeric" };
+    if (withYear || d.getFullYear() !== new Date().getFullYear()) opts.year = "numeric";
+    return d.toLocaleDateString("en-US", opts);
+  }
+  var USD = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+  function money(cents) { return USD.format(cents / 100); }
+  function span(pair) { return pair[0] === pair[1] ? money(pair[0]) : money(pair[0]) + "–" + money(pair[1]); }
+  /* Rates vary by night, so every figure is a low–high range. Work in cents so the rows add up exactly. */
+  function quote(room, nights) {
+    var lo = Math.round(room.rateLow * 100), hi = Math.round(room.rateHigh * 100);
+    var sub = [lo * nights, hi * nights];
+    var tax = [Math.round(sub[0] * TAX_RATE), Math.round(sub[1] * TAX_RATE)];
+    return { rate: [lo, hi], sub: sub, tax: tax, total: [sub[0] + tax[0], sub[1] + tax[1]] };
+  }
+  function party() { return { adults: parseInt(adultsInput.value, 10) || 0, children: parseInt(childrenInput.value, 10) || 0 }; }
+  function partyText() {
+    var p = party(), parts = [plural(p.adults, "adult", "adults")];
+    if (p.children > 0) parts.push(plural(p.children, "child", "children"));
+    return parts.join(", ");
+  }
+  function availText(room) {
+    if (room.left === 0) return "Sold out for these dates";
+    if (room.left < 10) return "Only " + plural(room.left, "room", "rooms") + " left";
+    return room.left + " rooms available";
+  }
+  function capacityIssue() {
+    var room = roomByName(state.selected);
+    if (!room) return "";
+    var p = party(), total = p.adults + p.children;
+    return total > room.sleeps
+      ? "The " + room.name + " sleeps up to " + room.sleeps + " guests. For a party of " + total + ", choose a larger room or call us at the front desk."
+      : "";
+  }
+  function joinWords(words) {
+    if (words.length < 2) return words.join("");
+    if (words.length === 2) return words[0] + " and " + words[1];
+    return words.slice(0, -1).join(", ") + ", and " + words[words.length - 1];
+  }
+  function setText(el, text) { if (el.textContent !== text) el.textContent = text; }
+
+  /* ---------- search band validation ---------- */
+  function searchError() {
+    var today = iso(new Date());
+    if (!arrival.value) return { el: arrival, msg: "Choose a check-in date." };
+    if (arrival.value < today) return { el: arrival, msg: "Check-in can't be in the past. Choose today or a later date." };
+    if (!departure.value) return { el: departure, msg: "Choose a check-out date." };
+    if (computeNights() <= 0) return { el: departure, msg: "Check-out must be after check-in. Choose a later check-out date." };
+    var a = parseInt(adultsInput.value, 10), c = parseInt(childrenInput.value, 10);
+    if (isNaN(a) || a < 1 || a > 8) return { el: adultsInput, msg: "Adults must be between 1 and 8." };
+    if (childrenInput.value !== "" && (isNaN(c) || c < 0 || c > 8)) return { el: childrenInput, msg: "Children must be between 0 and 8." };
+    return null;
+  }
+  function canLeaveStay() {
+    var room = roomByName(state.selected);
+    return !searchError() && state.avail === "ready" && !!room && isOpen(room);
   }
 
-  function stepValid(i) {
-    var fields = steps[i].querySelectorAll("input[required]");
-    for (var j = 0; j < fields.length; j++) {
-      if (!fields[j].checkValidity()) { fields[j].reportValidity(); return false; }
+  /* ---------- guest + address validation ---------- */
+  var zipInput = $("zip"), countrySelect = $("country");
+  var RULES = {
+    "full-name": function (v) { return v ? "" : "Enter the lead guest's full name."; },
+    email: function (v, el) {
+      if (!v) return "Enter an email address.";
+      return el.validity.typeMismatch ? "Enter a valid email address, like name@example.com." : "";
+    },
+    phone: function (v) {
+      if (!v) return "Enter a phone number.";
+      return v.replace(/\D/g, "").length < 7 ? "Enter a phone number with at least 7 digits." : "";
+    },
+    street: function (v) { return v ? "" : "Enter your street address."; },
+    city: function (v) { return v ? "" : "Enter your city."; },
+    state: function (v) { return v ? "" : "Enter your state or province."; },
+    zip: function (v) {
+      if (!v) return "Enter your ZIP or postal code.";
+      if (countrySelect.value === "United States" && !/^\d{5}(-\d{4})?$/.test(v)) return "Enter a 5-digit ZIP code, like 34236.";
+      return "";
     }
+  };
+  function fieldError(el) { return RULES[el.id] ? RULES[el.id](el.value.trim(), el) : ""; }
+  function setFieldError(el, msg) {
+    var wrap = el.closest(".field"), out = $(el.id + "-msg");
+    wrap.classList.toggle("has-error", !!msg);
+    if (out) setText(out, msg);
+    if (msg) el.setAttribute("aria-invalid", "true"); else el.removeAttribute("aria-invalid");
+  }
+  function validateField(el) { var msg = fieldError(el); setFieldError(el, msg); return !msg; }
+  function validateForm(i) {
+    var first = null;
+    steps[i].querySelectorAll("input, select").forEach(function (el) {
+      if (!RULES[el.id]) return;
+      state.touched[el.id] = true;
+      if (!validateField(el) && !first) first = el;
+    });
+    render();
+    if (first) { first.focus(); return false; }
+    return true;
+  }
+  function formInvalid(i) {
+    var els = steps[i].querySelectorAll("input, select");
+    for (var k = 0; k < els.length; k++) if (RULES[els[k].id] && fieldError(els[k])) return true;
+    return false;
+  }
+  function stepErrorLabels(i) {
+    return [].slice.call(steps[i].querySelectorAll(".field.has-error > label")).map(function (l) {
+      return l.textContent.replace("*", "").trim();
+    });
+  }
+
+  /* ---------- rail ---------- */
+  function rows() { return [].slice.call(list.querySelectorAll('[role="option"]')); }
+  function optionFor(name) {
+    var all = rows();
+    for (var i = 0; i < all.length; i++) if (all[i].dataset.room === name) return all[i];
+    return null;
+  }
+  function buildRail() {
+    ROOMS.forEach(function (room, i) {
+      var li = document.createElement("li");
+      li.className = "room-row";
+      li.id = "room-opt-" + i;
+      li.setAttribute("role", "option");
+      li.setAttribute("aria-selected", "false");
+      li.dataset.room = room.name;
+      li.tabIndex = -1;
+      li.innerHTML =
+        '<img class="row-thumb" alt="" width="72" height="72" src="' + encodeURI(room.photo) + '">' +
+        '<span class="row-text"><span class="row-name"></span><span class="row-beds"></span><span class="row-price"></span></span>' +
+        '<span class="row-check" aria-hidden="true">' + svg("check") + "</span>";
+      li.querySelector(".row-name").textContent = room.name;
+      var beds = li.querySelector(".row-beds");
+      if (isOpen(room)) {
+        beds.textContent = room.beds;
+      } else {
+        li.setAttribute("aria-disabled", "true");
+        beds.classList.add("row-reason");
+        beds.innerHTML = svg("alert");
+        beds.appendChild(document.createTextNode("Sold out"));
+      }
+      li.querySelector(".row-price").innerHTML = "<strong>from " + money(Math.round(room.rateLow * 100)) + "</strong> / night";
+      list.appendChild(li);
+
+      var sk = document.createElement("li");
+      sk.className = "room-row is-skeleton";
+      sk.innerHTML = '<span class="row-thumb sk"></span><span class="row-text"><span class="sk sk-line lg" style="width: 80%"></span><span class="sk sk-line" style="width: 52%"></span><span class="sk sk-line" style="width: 40%; margin: auto 0 0"></span></span><span class="row-check sk"></span>';
+      skeletons.appendChild(sk);
+    });
+  }
+  function railKind() {
+    if (state.avail === "loading") return "loading";
+    if (state.avail === "ready") return ROOMS.some(isOpen) ? "ready" : "empty";
+    return state.searchErr ? "error" : "idle";
+  }
+  var RAIL_COPY = {
+    idle: { icon: "calendar", title: "Rooms appear here", text: "Choose your dates and guests, then select Check availability." },
+    error: { icon: "alert", title: "Check your dates" },
+    empty: { icon: "alert", title: "No rooms for these dates", text: "Every room type is sold out for these dates. Try different dates, or call us at the front desk." }
+  };
+  function renderRail() {
+    var kind = railKind();
+    railScroll.setAttribute("aria-busy", String(kind === "loading"));
+    skeletons.hidden = kind !== "loading";
+    list.hidden = !(kind === "ready" || kind === "empty");
+    var copy = RAIL_COPY[kind];
+    railState.hidden = !copy;
+    if (copy) {
+      if (railState.dataset.kind !== kind) {
+        railState.dataset.kind = kind;
+        $("rail-state-ico").innerHTML = svg(copy.icon);
+      }
+      setText($("rail-state-title"), copy.title);
+      setText($("rail-state-text"), kind === "error" ? state.searchErr.msg : copy.text);
+    }
+    var meta = "Not checked yet";
+    if (kind === "loading") meta = "Checking…";
+    if (kind === "ready" || kind === "empty") {
+      var open = ROOMS.filter(isOpen).length;
+      meta = open === ROOMS.length
+        ? plural(open, "room type", "room types") + " available"
+        : open + " of " + ROOMS.length + " room types available";
+    }
+    setText($("rail-meta"), meta);
+
+    var tabName = roomByName(state.focusName) ? state.focusName : (state.selected || firstOpen().name);
+    rows().forEach(function (li) {
+      var name = li.dataset.room;
+      li.setAttribute("aria-selected", String(name === state.selected));
+      li.tabIndex = name === tabName ? 0 : -1;
+    });
+  }
+
+  /* ---------- detail pane ---------- */
+  function setPhoto(src, alt) {
+    var url = encodeURI(src);
+    if (detailImg.getAttribute("src") !== url) detailImg.setAttribute("src", url);
+    detailImg.alt = alt;
+  }
+  function amenitiesFor(room) {
+    var all = [];
+    room.groups.forEach(function (g) { all.push.apply(all, g.items); });
+    var picked = [];
+    AMENITIES.forEach(function (a) {
+      if (picked.length < 5 && all.indexOf(a.match) !== -1) picked.push(a);
+    });
+    return picked;
+  }
+  function renderDetail() {
+    var kind = railKind();
+    var ds = kind === "loading" ? "loading" : (kind === "ready" || kind === "empty") ? "room" : "idle";
+    detail.dataset.state = ds;
+    if (ds !== "room") { setPhoto(RESORT_PHOTO, RESORT_PHOTO_ALT); return; }
+
+    var room = roomByName(state.viewed) || roomByName(state.selected) || firstOpen();
+    if (detail.dataset.room === room.name + "|" + state.selected + "|" + partyText()) return;
+    detail.dataset.room = room.name + "|" + state.selected + "|" + partyText();
+
+    setPhoto(room.photo, "Photo of the " + room.name);
+    setText($("detail-name"), room.name);
+    setText($("detail-rate"), span(quote(room, 1).rate));
+
+    var chipAvail = $("chip-avail");
+    chipAvail.className = "chip" + (isOpen(room) ? "" : " is-out");
+    chipAvail.innerHTML = svg(isOpen(room) ? "door" : "alert");
+    chipAvail.appendChild(document.createTextNode(availText(room)));
+
+    var chipSel = $("chip-sel"), selected = room.name === state.selected;
+    chipSel.hidden = !isOpen(room);
+    chipSel.className = "chip" + (selected ? " is-selected" : "");
+    chipSel.innerHTML = svg(selected ? "check" : "ring");
+    chipSel.appendChild(document.createTextNode(selected ? "Selected for your stay" : "Not selected"));
+
+    setText($("detail-desc"), room.desc);
+    setText($("fact-beds"), room.beds);
+    setText($("fact-size"), room.size);
+    var p = party(), total = p.adults + p.children, short = total > room.sleeps;
+    $("fact-occ-li").classList.toggle("is-short", short);
+    setText($("fact-occ"), "Sleeps " + room.sleeps + (short ? " · your party is " + total : ""));
+
+    var ul = $("amenities");
+    ul.innerHTML = "";
+    amenitiesFor(room).forEach(function (a) {
+      var li = document.createElement("li");
+      li.className = "amenity";
+      li.innerHTML = svg(a.icon);
+      li.appendChild(document.createTextNode(a.label));
+      ul.appendChild(li);
+    });
+  }
+
+  /* ---------- summary ---------- */
+  function renderSummary() {
+    var nights = computeNights();
+    setText($("sum-in"), arrival.value ? fmtDay(arrival.value) : "—");
+    setText($("sum-out"), departure.value ? fmtDay(departure.value) : "—");
+    setText($("sum-nights"), nights > 0 ? String(nights) : "—");
+    setText($("sum-guests"), partyText());
+
+    var room = roomByName(state.selected);
+    var priced = !!room && nights > 0 && state.avail === "ready";
+    $("sum-room-block").classList.toggle("is-empty", !priced);
+    setText($("sum-empty-text"), room ? "Choose valid dates to see your estimated total." : "Select a room to see your estimated total.");
+    if (priced) {
+      var q = quote(room, nights);
+      setText($("sum-room"), room.name);
+      setText($("sum-rate"), span(q.rate));
+      setText($("sum-sub-label"), "Subtotal · " + plural(nights, "night", "nights"));
+      setText($("sum-sub"), span(q.sub));
+      setText($("sum-tax"), span(q.tax));
+      setText($("sum-tip-tax"), span(q.tax));
+      setText($("sum-total"), span(q.total));
+    }
+    setText($("st-value"), priced ? span(quote(room, nights).total) : room ? "Check your dates" : "Select a room");
+    $("sum-edit").hidden = state.step !== 3;
+  }
+
+  /* ---------- action bar status ---------- */
+  function statusFor() {
+    var cap = capacityIssue();
+    if (state.step === 0) {
+      var kind = railKind();
+      if (state.searchErr) return { tone: "error", text: state.searchErr.msg };
+      if (kind === "loading") return { tone: "", text: "Checking availability…" };
+      if (kind === "idle") return { tone: state.nudge ? "error" : "", text: "Check availability to see rooms for your dates." };
+      if (kind === "empty") return { tone: "error", text: "No rooms are available for these dates. Try different dates." };
+      var room = roomByName(state.selected), viewed = roomByName(state.viewed);
+      if (!room && viewed && !isOpen(viewed)) return { tone: "warn", text: "The " + viewed.name + " is sold out for these dates. Choose another room or change your dates." };
+      if (!room) return { tone: state.nudge ? "error" : "", text: "Select a room to continue." };
+      if (cap) return { tone: "warn", text: cap };
+      return { tone: "", text: room.name + " selected for " + plural(computeNights(), "night", "nights") + "." };
+    }
+    if (state.step === 1 || state.step === 2) {
+      var errs = stepErrorLabels(state.step);
+      if (errs.length) return { tone: "error", text: (errs.length === 1 ? "1 field needs" : errs.length + " fields need") + " attention: " + joinWords(errs) + "." };
+      if (cap && state.step === 1) return { tone: "warn", text: cap };
+      return { tone: "", text: state.step === 1 ? "Next: your address." : "Next: review your booking." };
+    }
+    if (state.submitted) return { tone: "", text: "The resort's booking engine opened in a new tab. Nothing has been booked on this page." };
+    return { tone: "", text: "Not booked yet — continues to the live booking engine." };
+  }
+  function renderStatus() {
+    var s = statusFor();
+    if (statusEl.dataset.tone !== s.tone) {
+      statusEl.dataset.tone = s.tone;
+      statusIco.innerHTML = s.tone === "error" ? svg("alert") : s.tone === "warn" ? svg("info") : "";
+    }
+    setText(statusText, s.text);
+  }
+
+  /* ---------- progress + step chrome ---------- */
+  function renderProgress() {
+    pSteps.forEach(function (li, i) {
+      var btn = li.querySelector("button"), mark = li.querySelector(".pstep-mark");
+      var active = i === state.step, done = !active && i < state.maxReached;
+      li.classList.toggle("is-active", active);
+      li.classList.toggle("is-done", done);
+      btn.disabled = i > state.maxReached;
+      if (active) btn.setAttribute("aria-current", "step"); else btn.removeAttribute("aria-current");
+      var markHtml = done ? svg("check") : String(i + 1);
+      if (mark.innerHTML !== markHtml) mark.innerHTML = markHtml;
+      setText(li.querySelector(".pstep-state"), active ? ", current step" : done ? ", completed" : ", not started");
+    });
+  }
+  function renderSearch() {
+    var nights = computeNights();
+    setText($("search-nights"), nights > 0 ? plural(nights, "night", "nights") : "");
+    [arrival, departure, adultsInput, childrenInput].forEach(function (el) {
+      var bad = !!state.searchErr && state.searchErr.el === el;
+      el.closest(".field").classList.toggle("has-error", bad);
+      if (bad) { el.setAttribute("aria-invalid", "true"); el.setAttribute("aria-describedby", "status-text"); }
+      else { el.removeAttribute("aria-invalid"); el.removeAttribute("aria-describedby"); }
+    });
+    form.querySelectorAll(".step-btn").forEach(function (b) {
+      var input = $(b.dataset.for), v = parseInt(input.value, 10), d = Number(b.dataset.delta);
+      b.disabled = !isNaN(v) && (d < 0 ? v <= Number(input.min) : v >= Number(input.max));
+    });
+    var loading = state.avail === "loading";
+    setText(checkBtn, loading ? "Checking…" : "Check availability");
+    if (loading) checkBtn.setAttribute("aria-disabled", "true"); else checkBtn.removeAttribute("aria-disabled");
+    checkBtn.classList.toggle("btn-quiet", state.avail === "ready");
+  }
+  function renderStep() {
+    shell.dataset.step = String(state.step);
+    steps.forEach(function (s, i) { s.hidden = i !== state.step; });
+    bands.forEach(function (b) { b.hidden = Number(b.dataset.band) !== state.step; });
+    stayStep.dataset.view = state.view;
+    backBtn.hidden = state.step === 0;
+    setText($("cta-verb"), CTA[state.step][0]);
+    setText($("cta-rest"), CTA[state.step][1]);
+    if (state.step === 0 && !canLeaveStay()) primary.setAttribute("aria-disabled", "true");
+    else primary.removeAttribute("aria-disabled");
+  }
+
+  /* ---------- review ---------- */
+  function populateReview() {
+    var room = roomByName(state.selected), nights = computeNights();
+    setText($("rv-room"), room ? room.name : "—");
+    setText($("rv-dates"), nights > 0 ? fmtDay(arrival.value, true) + " → " + fmtDay(departure.value, true) : "—");
+    var p = party(), bits = [];
+    if (nights > 0) bits.push(plural(nights, "night", "nights"));
+    bits.push(plural(p.adults, "adult", "adults"));
+    if (p.children > 0) bits.push(plural(p.children, "child", "children"));
+    setText($("rv-party"), bits.join(" · "));
+
+    if (room && nights > 0) {
+      var q = quote(room, nights);
+      setText($("rv-rate"), span(q.rate));
+      setText($("rv-sub-label"), "Subtotal · " + plural(nights, "night", "nights"));
+      setText($("rv-sub"), span(q.sub));
+      setText($("rv-tax"), span(q.tax));
+      setText($("rv-total"), span(q.total));
+    } else {
+      ["rv-rate", "rv-sub", "rv-tax", "rv-total"].forEach(function (id) { setText($(id), "—"); });
+    }
+
+    var cancel = "Free cancellation through —";
+    if (arrival.value && !isNaN(Date.parse(arrival.value))) cancel = "Free cancellation through " + fmtDay(addDays(arrival.value, -1), true);
+    setText($("rv-cancel"), cancel);
+
+    var name = $("full-name").value, company = $("company").value;
+    setText($("rv-guest-name"), (name || "—") + (company ? " · " + company : ""));
+    var arrTime = $("arrival-time").value;
+    setText($("rv-guest-contact"), [$("email").value, $("phone").value, arrTime ? "Arriving " + arrTime : ""].filter(Boolean).join(" · ") || "—");
+    var requests = $("requests").value;
+    setText($("rv-guest-requests"), requests ? "Requests: " + requests : "No special requests");
+    var place = [$("city").value, $("state").value, zipInput.value].filter(Boolean).join(", ");
+    setText($("rv-address"), [$("street").value, place, countrySelect.value].filter(Boolean).join(" · "));
+  }
+
+  /* ---------- fit: keep each fixed pane inside its box ----------
+     For each overflow-priority level (0 = everything shown), try the content column from full
+     width down to minWidth%; the detail photo keeps its 16:9 ratio, so a narrower column is a
+     shorter photo. The first combination that fits wins. */
+  function fitPane(pane, inner, levels, enabled, minWidth) {
+    for (var i = 1; i <= levels; i++) pane.classList.remove("fit-" + i);
+    inner.style.width = "";
+    if (!enabled) return;
+    var cs = getComputedStyle(pane);
+    var room = pane.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    for (var lvl = 0; lvl <= levels; lvl++) {
+      if (lvl) pane.classList.add("fit-" + lvl);
+      for (var w = 100; w >= minWidth; w -= 5) {
+        inner.style.width = w === 100 ? "" : w + "%";
+        if (inner.offsetHeight <= room + 0.5) return;
+      }
+    }
+  }
+  function fitAll() {
+    fitPane(paneDetail, detailInner, 4, !mqSingle.matches && state.step === 0, 60);
+    fitPane(summary, sumInner, 2, true, 100);
+  }
+  var fitQueued = false;
+  function scheduleFit() {
+    if (fitQueued) return;
+    fitQueued = true;
+    requestAnimationFrame(function () { fitQueued = false; fitAll(); });
+  }
+
+  function render() {
+    renderStep();
+    renderSearch();
+    renderRail();
+    renderDetail();
+    renderSummary();
+    renderStatus();
+    renderProgress();
+    if (state.step === 3) populateReview();
+    scheduleFit();
+  }
+
+  /* ---------- actions ---------- */
+  function runCheck() {
+    if (state.avail === "loading") return;
+    state.searchErr = searchError();
+    if (state.searchErr) { render(); state.searchErr.el.focus(); return; }
+    state.avail = "loading";
+    state.nudge = false;
+    state.view = "list";
+    render();
+    setTimeout(function () {
+      state.avail = "ready";
+      saveDraft();
+      render();
+    }, 500);
+  }
+
+  function selectRoom(name) {
+    var room = roomByName(name);
+    if (!room || !isOpen(room)) return;
+    state.selected = name;
+    state.viewed = name;
+    state.focusName = name;
+    state.nudge = false;
+    if (mqSingle.matches) state.view = "detail";
+    saveDraft();
+    render();
+    if (mqSingle.matches) {
+      paneDetail.scrollTop = 0;
+      $("detail-name").focus({ preventScroll: true });
+    } else {
+      var li = optionFor(name);
+      if (li && document.activeElement !== li) li.focus();
+    }
+  }
+
+  function focusRail() {
+    if (mqSingle.matches && state.view !== "list") { state.view = "list"; render(); }
+    var li = optionFor(state.focusName) || optionFor(state.selected) || optionFor(firstOpen().name);
+    if (li) li.focus();
+  }
+
+  function validateStay() {
+    state.searchErr = searchError();
+    if (state.searchErr) { render(); state.searchErr.el.focus(); return false; }
+    if (state.avail !== "ready") { state.nudge = true; render(); checkBtn.focus(); return false; }
+    var room = roomByName(state.selected);
+    if (!room || !isOpen(room)) { state.nudge = true; render(); focusRail(); return false; }
     return true;
   }
 
-  form.querySelectorAll("[data-next]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      if (!stepValid(current)) return;
-      if (current < steps.length - 1) showStep(current + 1);
-    });
-  });
-  form.querySelectorAll("[data-back]").forEach(function (b) {
-    b.addEventListener("click", function () { if (current > 0) showStep(current - 1); });
+  function focusTitle() {
+    var t = bands[state.step].querySelector("[data-step-title]");
+    if (t) t.focus({ preventScroll: true });
+  }
+
+  function goTo(i) {
+    if (i < 0 || i >= steps.length || i > state.maxReached) return;
+    state.step = i;
+    state.nudge = false;
+    setSheet(false);
+    render();
+    focusTitle();
+  }
+
+  function advance() {
+    var i = state.step;
+    var ok = i === 0 ? validateStay() : i < steps.length - 1 ? validateForm(i) : true;
+    if (!ok) return;
+    if (i === steps.length - 1) { form.requestSubmit(); return; }
+    state.maxReached = Math.max(state.maxReached, i + 1);
+    goTo(i + 1);
+  }
+
+  function firstInvalidStep() {
+    if (!canLeaveStay()) return 0;
+    if (formInvalid(1)) return 1;
+    if (formInvalid(2)) return 2;
+    return -1;
+  }
+
+  /* ---------- bottom sheet (summary on narrow screens) ---------- */
+  var inertTargets = [document.querySelector(".masthead"), document.querySelector(".progress"), form.querySelector(".band"), form.querySelector(".actionbar")].concat(steps);
+  function setSheet(open) {
+    if (open && mqInline.matches) return;
+    if (state.sheet === open) return;
+    state.sheet = open;
+    shell.classList.toggle("sheet-open", open);
+    sheetBackdrop.hidden = !open;
+    sheetToggle.setAttribute("aria-expanded", String(open));
+    inertTargets.forEach(function (el) { el.inert = open; });
+    if (open) {
+      summary.setAttribute("role", "dialog");
+      summary.setAttribute("aria-modal", "true");
+      $("summary-title").focus({ preventScroll: true });
+    } else {
+      summary.removeAttribute("role");
+      summary.removeAttribute("aria-modal");
+      if (!document.activeElement || document.activeElement === document.body || summary.contains(document.activeElement)) sheetToggle.focus({ preventScroll: true });
+    }
+  }
+
+  /* ---------- draft persistence ---------- */
+  var FIELD_IDS = ["arrival", "departure", "full-name", "email", "phone", "company", "arrival-time", "adults", "children", "requests", "street", "zip", "city", "state", "country"];
+  function saveDraft() {
+    try {
+      var data = {};
+      FIELD_IDS.forEach(function (id) { var el = $(id); if (el) data[id] = el.value; });
+      data.room = state.selected || "";
+      data.checked = state.avail === "ready";
+      sessionStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+    } catch (e) {}
+  }
+  function loadDraft() {
+    try {
+      var raw = sessionStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      FIELD_IDS.forEach(function (id) { var el = $(id); if (el && data[id]) el.value = data[id]; });
+      if (data.room && roomByName(data.room)) state.selected = data.room;
+      if (data.room || data.checked) state.avail = "ready";
+    } catch (e) {}
+  }
+
+  /* ---------- events ---------- */
+  var SEARCH_IDS = ["arrival", "departure", "adults", "children"];
+  function onFieldEvent(e) {
+    var t = e.target;
+    if (SEARCH_IDS.indexOf(t.id) !== -1) {
+      if (t === arrival && arrival.value) {
+        departure.min = addDays(arrival.value, 1);
+        if (!departure.value || departure.value <= arrival.value) departure.value = addDays(arrival.value, 1);
+      }
+      if (state.searchErr || state.avail === "ready") state.searchErr = searchError();
+      state.nudge = false;
+    } else if (RULES[t.id] && t.closest(".field").classList.contains("has-error")) {
+      validateField(t);
+    }
+    if (t === countrySelect) {
+      zipInput.inputMode = countrySelect.value === "United States" ? "numeric" : "text";
+      if (state.touched.zip) validateField(zipInput);
+    }
+    saveDraft();
+    render();
+  }
+  form.addEventListener("input", onFieldEvent);
+  form.addEventListener("change", onFieldEvent);
+  form.addEventListener("focusout", function (e) {
+    var t = e.target;
+    if (!RULES[t.id] || !(t.value.trim() || state.touched[t.id])) return;
+    state.touched[t.id] = true;
+    validateField(t);
+    renderStatus();
   });
 
   form.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
-      e.preventDefault();
-      if (current < steps.length - 1) {
-        if (stepValid(current)) showStep(current + 1);
-      } else if (stepValid(current)) {
-        form.requestSubmit();
-      }
-    }
+    if (e.key !== "Enter" || e.defaultPrevented || e.target.tagName !== "INPUT") return;
+    e.preventDefault();
+    if (state.step === 0 && state.avail !== "ready") runCheck(); else advance();
   });
 
-  var arrival = document.getElementById("arrival"), departure = document.getElementById("departure");
-  var badge = document.getElementById("nights-badge");
+  form.querySelectorAll(".step-btn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var input = $(b.dataset.for), v = parseInt(input.value, 10);
+      if (isNaN(v)) v = Number(input.min);
+      input.value = Math.min(Number(input.max), Math.max(Number(input.min), v + Number(b.dataset.delta)));
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+  });
 
-  function iso(d) { var z = new Date(d.getTime() - d.getTimezoneOffset() * 60000); return z.toISOString().slice(0, 10); }
-  var today = iso(new Date());
-  arrival.min = today;
-  arrival.value = iso(new Date(Date.now() + 14 * 864e5));
-  departure.min = iso(new Date(Date.parse(arrival.value) + 864e5));
-  departure.value = iso(new Date(Date.now() + 17 * 864e5));
+  checkBtn.addEventListener("click", runCheck);
 
-  function updateNights() {
-    var a = Date.parse(arrival.value), b = Date.parse(departure.value);
-    if (isNaN(a) || isNaN(b) || b <= a) { badge.textContent = "— nights"; return; }
-    var n = Math.round((b - a) / 864e5);
-    badge.textContent = n + (n === 1 ? " night" : " nights");
-    departure.min = iso(new Date(a + 864e5));
-  }
-  arrival.addEventListener("change", updateNights);
-  departure.addEventListener("change", updateNights);
-  updateNights();
+  list.addEventListener("click", function (e) {
+    var li = e.target.closest('[role="option"]');
+    if (!li) return;
+    if (li.getAttribute("aria-disabled") === "true") {
+      state.viewed = state.focusName = li.dataset.room;
+      render();
+      li.focus();
+      return;
+    }
+    selectRoom(li.dataset.room);
+  });
+  list.addEventListener("focusin", function (e) {
+    var li = e.target.closest('[role="option"]');
+    if (!li || (state.viewed === li.dataset.room && state.focusName === li.dataset.room)) return;
+    state.viewed = state.focusName = li.dataset.room;
+    renderRail();
+    renderDetail();
+    scheduleFit();
+  });
+  list.addEventListener("keydown", function (e) {
+    var all = rows(), i = all.indexOf(e.target.closest('[role="option"]'));
+    if (i < 0) return;
+    var next = null;
+    if (e.key === "ArrowDown") next = all[Math.min(i + 1, all.length - 1)];
+    else if (e.key === "ArrowUp") next = all[Math.max(i - 1, 0)];
+    else if (e.key === "Home") next = all[0];
+    else if (e.key === "End") next = all[all.length - 1];
+    else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      selectRoom(all[i].dataset.room);
+      return;
+    } else return;
+    e.preventDefault();
+    next.focus();
+  });
+
+  $("detail-back").addEventListener("click", function () {
+    state.view = "list";
+    render();
+    focusRail();
+  });
+
+  primary.addEventListener("click", advance);
+  backBtn.addEventListener("click", function () { goTo(state.step - 1); });
+  document.querySelectorAll("[data-goto]").forEach(function (b) {
+    b.addEventListener("click", function () { goTo(parseInt(b.dataset.goto, 10)); });
+  });
+
+  sheetToggle.addEventListener("click", function () { setSheet(!state.sheet); });
+  $("sheet-close").addEventListener("click", function () { setSheet(false); });
+  sheetBackdrop.addEventListener("click", function () { setSheet(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && state.sheet) setSheet(false); });
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    if (!stepValid(current)) return;
-    window.open("https://guestlogic.ai/#/book/golden-host", "_blank", "noopener");
+    var bad = firstInvalidStep();
+    if (bad !== -1) {
+      goTo(bad);
+      if (bad === 0) validateStay(); else validateForm(bad);
+      return;
+    }
+    try { sessionStorage.removeItem(DRAFT_KEY); } catch (err) {}
+    state.submitted = true;
+    render();
+    window.open(BOOKING_ENGINE, "_blank", "noopener");
   });
+
+  function onLayoutChange() {
+    if (mqInline.matches) setSheet(false);
+    render();
+  }
+  if (mqInline.addEventListener) { mqInline.addEventListener("change", onLayoutChange); mqSingle.addEventListener("change", onLayoutChange); }
+  if ("ResizeObserver" in window) new ResizeObserver(scheduleFit).observe($("workspace"));
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleFit);
+  detailImg.addEventListener("load", scheduleFit);
+
+  /* ---------- edit-stay dialog (step 4) ---------- */
+  var esDialog = $("edit-stay"), esArrival = $("es-arrival"), esDeparture = $("es-departure"), esRoom = $("es-room");
+  var esError = $("es-error"), esTotal = $("es-total"), esLastFocused = null;
+  ROOMS.forEach(function (room) {
+    var o = document.createElement("option");
+    o.value = room.name;
+    o.textContent = room.name + " — " + span(quote(room, 1).rate) + "/night" + (isOpen(room) ? "" : " (sold out)");
+    o.disabled = !isOpen(room);
+    esRoom.appendChild(o);
+  });
+  function esNights() {
+    var a = Date.parse(esArrival.value), b = Date.parse(esDeparture.value);
+    if (!esArrival.value || !esDeparture.value || isNaN(a) || isNaN(b) || b <= a) return 0;
+    return Math.round((b - a) / 864e5);
+  }
+  function esUpdateTotal() {
+    var n = esNights(), room = roomByName(esRoom.value);
+    if (!n) { esTotal.textContent = "Select valid dates to see an estimated total."; return; }
+    if (!room) { esTotal.textContent = ""; return; }
+    esTotal.textContent = plural(n, "night", "nights") + ": " + span(quote(room, n).sub) + " plus tax";
+  }
+  function openEditStay() {
+    esLastFocused = document.activeElement;
+    setSheet(false);
+    esArrival.min = arrival.min;
+    esArrival.value = arrival.value;
+    esDeparture.min = departure.min;
+    esDeparture.value = departure.value;
+    esRoom.value = state.selected || firstOpen().name;
+    esError.textContent = "";
+    esUpdateTotal();
+    esDialog.showModal();
+  }
+  function closeEditStay() { esDialog.close(); }
+  esDialog.addEventListener("close", function () {
+    if (esLastFocused && esLastFocused.isConnected && document.activeElement === document.body) esLastFocused.focus();
+  });
+  esDialog.addEventListener("click", function (e) { if (e.target === esDialog) closeEditStay(); });
+  document.querySelectorAll(".edit-stay-open").forEach(function (btn) {
+    btn.addEventListener("click", function (e) { e.preventDefault(); openEditStay(); });
+  });
+  $("edit-stay-close").addEventListener("click", closeEditStay);
+  $("es-cancel").addEventListener("click", closeEditStay);
+  esArrival.addEventListener("change", function () {
+    if (!isNaN(Date.parse(esArrival.value))) esDeparture.min = addDays(esArrival.value, 1);
+    esUpdateTotal();
+  });
+  esDeparture.addEventListener("change", esUpdateTotal);
+  esRoom.addEventListener("change", esUpdateTotal);
+  $("es-save").addEventListener("click", function () {
+    if (!esNights()) {
+      esError.textContent = "Check-out must be after check-in. Choose a later check-out date.";
+      esDeparture.focus();
+      return;
+    }
+    esError.textContent = "";
+    arrival.value = esArrival.value;
+    departure.value = esDeparture.value;
+    departure.min = addDays(arrival.value, 1);
+    state.selected = state.viewed = state.focusName = esRoom.value;
+    state.searchErr = searchError();
+    saveDraft();
+    closeEditStay();
+    render();
+  });
+
+  /* ---------- init ---------- */
+  var today = iso(new Date());
+  arrival.min = today;
+  arrival.value = addDays(today, 14);
+  departure.value = addDays(today, 17);
+  buildRail();
+  loadDraft();
+  if (arrival.value) departure.min = addDays(arrival.value, 1);
+  zipInput.inputMode = countrySelect.value === "United States" ? "numeric" : "text";
+  render();
 })();
 </script>
 
