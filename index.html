@@ -771,7 +771,7 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outl
                   <div class="pl-row"><dt>Nightly rate</dt><dd id="rv-rate">&mdash;</dd></div>
                   <div class="pl-row"><dt id="rv-sub-label">Subtotal</dt><dd id="rv-sub">&mdash;</dd></div>
                   <div class="pl-row"><dt>Taxes (13%)</dt><dd id="rv-tax">&mdash;</dd></div>
-                  <div class="pl-row pl-total"><dt>Estimated total</dt><dd id="rv-total">&mdash;</dd></div>
+                  <div class="pl-row pl-total"><dt>Stay total</dt><dd id="rv-total">&mdash;</dd></div>
                 </dl>
               </section>
               <section class="rv-block" aria-labelledby="rv-terms-h">
@@ -810,13 +810,13 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outl
                 <div class="pl-row"><dt id="sum-sub-label">Subtotal</dt><dd id="sum-sub">&mdash;</dd></div>
                 <div class="pl-row pl-tax"><dt>Taxes (13%)</dt><dd id="sum-tax">&mdash;</dd></div>
                 <div class="pl-row pl-total">
-                  <dt>Estimated total<span class="tip-wrap"><button type="button" class="tip-btn" aria-label="Tax details" aria-describedby="sum-tip">i</button><span class="tip" role="tooltip" id="sum-tip">Includes taxes (13%): <span id="sum-tip-tax">&mdash;</span></span></span></dt>
+                  <dt><span id="sum-total-label">Estimated total</span><span class="tip-wrap"><button type="button" class="tip-btn" aria-label="Tax details" aria-describedby="sum-tip">i</button><span class="tip" role="tooltip" id="sum-tip">Includes taxes (13%): <span id="sum-tip-tax">&mdash;</span></span></span></dt>
                   <dd id="sum-total">&mdash;</dd>
                 </div>
               </dl>
             </div>
           </div>
-          <p class="sum-note">Estimate only. The final price, including any fees, is confirmed at payment.</p>
+          <p class="sum-note" id="sum-note">Estimate only. The final price, including any fees, is confirmed at payment.</p>
           <p class="sum-legal">&copy; Guest Logic LLC &middot; <a href="#">Privacy Policy</a> &middot; <a href="#">Terms of Use</a></p>
         </div>
       </aside>
@@ -1054,9 +1054,11 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outl
   var USD = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
   function money(cents) { return USD.format(cents / 100); }
   function span(pair) { return pair[0] === pair[1] ? money(pair[0]) : money(pair[0]) + "–" + money(pair[1]); }
-  /* Rates vary by night, so every figure is a low–high range. Work in cents so the rows add up exactly. */
-  function quote(room, nights) {
-    var lo = Math.round(room.rateLow * 100), hi = Math.round(room.rateHigh * 100);
+  /* Rates vary by night, so before review every figure is a low–high range. Review & Confirm
+     (exact = true) prices the stay at the room's base nightly rate, as the original review step did.
+     Work in cents so the rows add up exactly. */
+  function quote(room, nights, exact) {
+    var lo = Math.round(room.rateLow * 100), hi = exact ? lo : Math.round(room.rateHigh * 100);
     var sub = [lo * nights, hi * nights];
     var tax = [Math.round(sub[0] * TAX_RATE), Math.round(sub[1] * TAX_RATE)];
     return { rate: [lo, hi], sub: sub, tax: tax, total: [sub[0] + tax[0], sub[1] + tax[1]] };
@@ -1307,8 +1309,9 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outl
     var priced = !!room && nights > 0 && state.avail === "ready";
     $("sum-room-block").classList.toggle("is-empty", !priced);
     setText($("sum-empty-text"), room ? "Choose valid dates to see your estimated total." : "Select a room to see your estimated total.");
+    var exact = state.step === 3;
+    var q = priced ? quote(room, nights, exact) : null;
     if (priced) {
-      var q = quote(room, nights);
       setText($("sum-room"), room.name);
       setText($("sum-rate"), span(q.rate));
       setText($("sum-sub-label"), "Subtotal · " + plural(nights, "night", "nights"));
@@ -1317,7 +1320,9 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outl
       setText($("sum-tip-tax"), span(q.tax));
       setText($("sum-total"), span(q.total));
     }
-    setText($("st-value"), priced ? span(quote(room, nights).total) : room ? "Check your dates" : "Select a room");
+    setText($("sum-total-label"), exact ? "Stay total" : "Estimated total");
+    $("sum-note").hidden = exact;
+    setText($("st-value"), priced ? span(q.total) : room ? "Check your dates" : "Select a room");
     $("sum-edit").hidden = state.step !== 3;
   }
 
@@ -1410,7 +1415,7 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outl
     setText($("rv-party"), bits.join(" · "));
 
     if (room && nights > 0) {
-      var q = quote(room, nights);
+      var q = quote(room, nights, true);
       setText($("rv-rate"), span(q.rate));
       setText($("rv-sub-label"), "Subtotal · " + plural(nights, "night", "nights"));
       setText($("rv-sub"), span(q.sub));
@@ -1728,7 +1733,7 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outl
   ROOMS.forEach(function (room) {
     var o = document.createElement("option");
     o.value = room.name;
-    o.textContent = room.name + " — " + span(quote(room, 1).rate) + "/night" + (isOpen(room) ? "" : " (sold out)");
+    o.textContent = room.name + " — " + span(quote(room, 1, true).rate) + "/night" + (isOpen(room) ? "" : " (sold out)");
     o.disabled = !isOpen(room);
     esRoom.appendChild(o);
   });
@@ -1741,7 +1746,7 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outl
     var n = esNights(), room = roomByName(esRoom.value);
     if (!n) { esTotal.textContent = "Select valid dates to see an estimated total."; return; }
     if (!room) { esTotal.textContent = ""; return; }
-    esTotal.textContent = plural(n, "night", "nights") + ": " + span(quote(room, n).sub) + " plus tax";
+    esTotal.textContent = plural(n, "night", "nights") + ": " + span(quote(room, n, true).sub) + " plus tax";
   }
   function openEditStay() {
     esLastFocused = document.activeElement;
